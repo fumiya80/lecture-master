@@ -8,7 +8,7 @@
 ## EC2
 ![ec2](./ec2.png)
 ## EC2セキュリティグループ
-![ec2sg](./ec2sg.png)
+![ec2sg](./ec2sgv2.png)
 ## RDS
 ![rds](./RDS.png)
 ## EC2接続
