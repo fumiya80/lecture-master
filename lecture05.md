@@ -6,7 +6,7 @@
 ### 組み込みサーバーでの動作確認
 - bundle installで必要なパッケージをインストール
 - bin/setupを完了させbin/devにてアプリ起動  
-![組込みサーバ動作確認](./image/05_kumikomi.png)
+![組込みサーバ動作確認](05_kumikomi.png)
 
 ### nginxとunicornでの動作確認
 - nginxをインストールし設定ファイルを編集する。(unicorn.sockが生成される場所と受け付けるポート番号に気を付ける)
