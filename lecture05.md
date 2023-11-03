@@ -14,8 +14,6 @@
 ![nginx起動確認](image/05_nginx.png)
 - unicornがインストールされていることを確認し起動し確認する(どの環境で起動させるか注意する)  
 ![unicorn起動確認](image/05_unicorn.png)
-- 動作確認  
-![nginxとunicornで動作確認](image/05_nginxtounicorn.png)
 
 ## ALB追加し動作確認
 - ALB作成  
@@ -24,17 +22,17 @@
 ![ALB](image/05_ALB3.png)
 - DNSで入れるようにでdevelopment.rbで許可する
 - 動作確認  
-![ALBで動作確認](image/05_ALB4.png)
+![ALBで動作確認](image/05_ALB4v2.png)
 
 ## S3を追加し動作確認
 - S3作成しEC2にS3用の権限を与える
 - storage.ymlとdevelopment.rbを編集する
 - 動作確認  
-![S3で動作確認1](image/05_S3-1.png)  
-![S3で動作確認2](image/05_S3-2.png)
+![S3で動作確認1](image/05_S3-1v2.png)  
+![S3で動作確認2](image/05_S3-2v2.png)
 
 ## 構成図
-![構成図](image/05_kouseizu.png)
+![構成図](image/05_kouseizuv2.png)
 
 ## 感想
 - 闇雲に設定ファイルを変えてはいけないことを学んだ
