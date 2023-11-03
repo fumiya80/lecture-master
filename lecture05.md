@@ -29,7 +29,7 @@
 - storage.ymlとdevelopment.rbを編集する
 - 動作確認  
 ![S3で動作確認1](image/05_S3-1v2.png)  
-![S3で動作確認2](image/05_S3-2v2.png)
+![S3で動作確認2](image/05_S3-2.png)
 
 ## 構成図
 ![構成図](image/05_kouseizuv2.png)
