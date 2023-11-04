@@ -1,6 +1,7 @@
 # 第6回課題提出
 ## CloudTrail のイベント
 - StopDBInstance(RDSの停止)
+- 含まれている情報は"イベント時間""イベントソース""発信元IPアドレス"等がある
 ![Stopdb](image/06_CloudTrail01.png)
 - StopInstance(EC2の停止)
 ![Stopec2](image/06_CloudTrail02.png)
@@ -26,11 +27,12 @@
 ![Billing01](image/06_Billing01.png)
 - 今月のEC2利用料
 ![Billing02](image/06_Billing02.png)
+- 発生費用はEC2のelasticIPを関連付けせずのままであったためだった。今回までの課題では使用しなかったので削除した
 
 ## 感想
 - 安定稼働及び証跡を取ることの重要性を学んだ
 - 今まで「logを取る必要性」はシステム構築時に何が問題であるか把握するために取るものであったが、今回の講義を聞き不正アクセス等の履歴を残すため必須であるものに認識が変わった
 - AWSでは様々なlogを残す方法があることを知った
-- EC2のelasticIPを関連付けせず放置され料金が発生していることに気付いた(消去済)
+
 
 
