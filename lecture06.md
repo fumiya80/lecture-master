@@ -20,7 +20,7 @@
 ![mail02](image/06_CloudWatch04.png)
 
 ## AWS利用料の見積り
-[見積り](https://calculator.aws/#/estimate?id=7a408686a4eeb81324a62015035d46ed2200e5f7)
+[見積り](https://calculator.aws/#/estimate?id=f9c67c6cbb52fee27f363efadcc005ca33adea53)
 
 ## 現在の利用料
 - 今月のAWS利用料
