@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: lecture10-ALB-template
+
+
+Parameters:
+  #ALB----------------------------------------------------------------------
+  ALBName:
+    Type: String
+    Default: "RaiseTech-ALB"
+
+  #TargetGroup--------------------------------------------------------------
+  TargetGroupName:
+    Type: String
+    Default: "RaiseTech-TargetGroup"
+
+Resources:
+  #ALB---------------------------------------------------------------------
+  MyALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Type: application
+      IpAddressType: ipv4
+      Name: !Ref ALBName
+      Scheme: internet-facing
+      SecurityGroups:
+        - !ImportValue RaiseTech-ALBSG
+      SubnetMappings:
+        - SubnetId: !ImportValue RaiseTech-PublicSubnet1
+        - SubnetId: !ImportValue RaiseTech-PublicSubnet2
+      Tags:
+        - Key: Name
+          Value: !Ref ALBName
+
+  #TargetGroup--------------------------------------------------------------
+  MyTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      VpcId: !ImportValue RaiseTech-VPC
+      IpAddressType: ipv4
+      Protocol: HTTP  #ヘルスチェックを行う際のプロトコル
+      ProtocolVersion: HTTP1
+      Port: 80
+      TargetType: instance
+      Targets:
+        - Id: !ImportValue RaiseTech-EC2
+          Port: 80
+      HealthCheckEnabled: true                        #ヘルスチェック有効化
+      HealthCheckIntervalSeconds: 60                  #ヘルスチェックの間隔
+      HealthCheckPath: /
+      HealthCheckPort: traffic-port  #ヘルスチェックを行う際に使用するポート
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 3
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: 200
+      Tags:
+        - Key: Name
+          Value: !Ref TargetGroupName
+
+  #Listener-----------------------------------------------------------------
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener    
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+         - TargetGroupArn: !Ref MyTargetGroup
+           Type: forward
+      LoadBalancerArn: !Ref MyALB
+
+Outputs:
+  #output-------------------------------------------------------------------
+  MyEC2:
+    Value: !Ref MyALB
+    Export:
+      Name: !Ref ALBName
