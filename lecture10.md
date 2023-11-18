@@ -14,16 +14,17 @@
 
 ## VPC作成
 - Parameters  
-  #vpc----------------------------------------------------------------------  
-  VpcCidrBlock:  
-    Description: Input a VPC IPv4 CidrBlock. # ex 192.168.2.0/16  
-    Type: String  
-    Default: "10.0.0.0/16"  
-  VpcName:  
-    Description: Input a VPC name. This Parameter will be a Name tag.  
-    Type: String  
-    Default: "RaiseTech-VPC"  
-  
+```yaml
+  #vpc----------------------------------------------------------------------
+  VpcCidrBlock:
+    Description: Input a VPC IPv4 CidrBlock. # ex 192.168.2.0/16
+    Type: String
+    Default: "10.0.0.0/16"
+  VpcName:
+    Description: Input a VPC name. This Parameter will be a Name tag.
+    Type: String
+    Default: "RaiseTech-VPC"
+
   #igw----------------------------------------------------------------------
   InternetGwName:
     Description: Input a IntenetGW name. This Parameter will be a Name tag.
@@ -99,8 +100,9 @@
     Description: Input a RouteTable name. This Parameter will be a Name tag.
     Type: String
     Default: "RaiseTech-PrivateRouteTable2"
-
+```
 - Resources
+```yaml
   #vpc----------------------------------------------------------------------
   MyVPC:
     Type: AWS::EC2::VPC
@@ -228,7 +230,7 @@
     Properties:
       RouteTableId: !Ref MyPrivateRouteTable2
       SubnetId: !Ref MyPrivateSubnet2
-
+```
 - 構築した環境
 ![VPC](image/10_VPC1.png)
 
