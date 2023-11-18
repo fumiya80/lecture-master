@@ -470,8 +470,7 @@
          Value: !Ref RDSName
 ```
 - 構築した環境
-![RDS1](image/10_RDS1.png)
-![RDS2](image/10_RDS2.png)
+![RDS](image/10_RDS.png)
 
 ## ALB作成
 - Parameters
