@@ -13,17 +13,17 @@
 - 今回はParametersを用い変数を事前に設定することで、設定を変更し再度環境構築したい際に値を振り直し易い形で作成した。
 
 ## VPC作成
-- Parameters
-  #vpc----------------------------------------------------------------------
-  VpcCidrBlock:
-    Description: Input a VPC IPv4 CidrBlock. # ex 192.168.2.0/16
-    Type: String
-    Default: "10.0.0.0/16"
-  VpcName:
-    Description: Input a VPC name. This Parameter will be a Name tag.
-    Type: String
-    Default: "RaiseTech-VPC"
-
+- Parameters  
+  #vpc----------------------------------------------------------------------  
+  VpcCidrBlock:  
+    Description: Input a VPC IPv4 CidrBlock. # ex 192.168.2.0/16  
+    Type: String  
+    Default: "10.0.0.0/16"  
+  VpcName:  
+    Description: Input a VPC name. This Parameter will be a Name tag.  
+    Type: String  
+    Default: "RaiseTech-VPC"  
+  
   #igw----------------------------------------------------------------------
   InternetGwName:
     Description: Input a IntenetGW name. This Parameter will be a Name tag.
@@ -419,7 +419,6 @@
    Type: String
    Default: "RaiseTech-RDSSubnetGroup"
 
-
 - Resources
   #RDSubnetgroup------------------------------------------------------------
   MyRDSSubnetGroup:
@@ -463,7 +462,6 @@
 ![RDS1](image/10_RDS1.png)
 ![RDS2](image/10_RDS2.png)
 
-
 ## ALB作成
 - Parameters
   #ALB----------------------------------------------------------------------
@@ -476,7 +474,7 @@
     Type: String
     Default: "RaiseTech-TargetGroup"
 
-- Resources
+- Resources 
   #ALB---------------------------------------------------------------------
   MyALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -536,15 +534,14 @@
 ![ALB](image/10_ALB.png)
 ![TG](image/10_TG.png)
 
-
-## S3作成
-- Parameters
+## S3作成 
+- Parameters 
   S3Name: 
    Type: String
    Default: "raisetech-s3-231118"
 
 
-- Resources
+- Resources 
   MyS3:
     Type: AWS::S3::Bucket
     Properties:
@@ -561,7 +558,6 @@
 
 - 構築した環境
 ![S3](image/10_S3.png)
-
 
 ## 感想
 - これまで手動構築した環境をコードにすることで、各サービスの紐づきが可視化され理解が深まった。
