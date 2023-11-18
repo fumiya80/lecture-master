@@ -237,11 +237,13 @@
 ## SecurityGroup作成
 ### ALB用SecurityGroup
 - Parameters
+```yaml
   ALBSGName:
     Type: String
     Default: "RaiseTech-ALBSG"
-
+```
 - Resources
+```yaml
   MyALBSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -256,13 +258,14 @@
       Tags:
         - Key: Name
           Value: !Ref ALBSGName
-
+```
 - 構築した環境
 ![ALBSG1](image/10_ALBSG1.png)
 ![ALBSG2](image/10_ALBSG1.png)
 
 ### EC2用SecurityGroup
 - Parameters
+```yaml
   MyIP:
     Description: IP address allowed to access EC2
     Type: String
@@ -271,8 +274,9 @@
   EC2SGName:
     Type: String
     Default: "RaiseTech-EC2SG"
-
+```
 - Resources
+```yaml
   MyEC2SG:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -288,18 +292,20 @@
           FromPort: 80
           ToPort: 80
           SourceSecurityGroupId: !Ref MyALBSG  #このセキュリティグループとの通信は許可する
-
+```
 - 構築した環境
 ![EC2SG1](image/10_EC2SG1.png)
 ![EC2SG1](image/10_EC2SG2.png)
 
 ### RDS用SecurityGroup
 - Parameters
+```yaml
   RDSSGName:
     Type: String
     Default: "RaiseTech-RDSSG"
-
+```
 - Resources
+```yaml
   MyRDSSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -311,16 +317,14 @@
           FromPort: 3306
           ToPort: 3306
           SourceSecurityGroupId: !Ref MyEC2SG
-
+```
 - 構築した環境
 ![RDSSG1](image/10_RDSSG1.png)
 ![RDSSG2](image/10_RDSSG2.png)
 
-## IAM作成
-- Parameters
-
 ## EC2作成
 - Parameters
+```yaml
   EC2Name:
    Type: String
    Default: "RaiseTech-EC2"
@@ -336,8 +340,9 @@
   EC2AZ:
     Type: AWS::EC2::AvailabilityZone::Name
     Default: "ap-northeast-1a"
-
+```
 - Resources
+```yaml
   #EC2KeyPair---------------------------------------------------------------
   MyKeyPair:
     Type: AWS::EC2::KeyPair
@@ -363,18 +368,20 @@
       Tags:
         - Key: Name
           Value: !Ref EC2Name
-
+```
 - 構築した環境
 ![EC21](image/10_EC21.png)
 ![EC22](image/10_EC22.png)
 
 ## IAM作成(スタックではEC2より前に作成)
 - Parameters
+```yaml
   MyEC2InstanceProfileName:
     Type: String
     Default: "RaiseTech-EC2InstanceProfile"
-
+```
 - Resources
+```yaml
   #IAMRole------------------------------------------------------------------
   MyS3AccessRole:
     Type: AWS::IAM::Role
@@ -399,12 +406,13 @@
       Path: /
       Roles:
         - !Ref MyS3AccessRole
-
+```
 - 構築した環境
 ![IAM](image/10_IAM.png)
 
 ## RDS作成
 - Parameters
+```yaml
   RDSName:
    Type: String
    Default: "RaiseTech-RDS"
@@ -420,8 +428,9 @@
   RDSSubnetGroupName:
    Type: String
    Default: "RaiseTech-RDSSubnetGroup"
-
+```
 - Resources
+```yaml
   #RDSubnetgroup------------------------------------------------------------
   MyRDSSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
@@ -459,13 +468,14 @@
      Tags:
        - Key: Name
          Value: !Ref RDSName
-
+```
 - 構築した環境
 ![RDS1](image/10_RDS1.png)
 ![RDS2](image/10_RDS2.png)
 
 ## ALB作成
 - Parameters
+```yaml
   #ALB----------------------------------------------------------------------
   ALBName:
     Type: String
@@ -475,8 +485,9 @@
   TargetGroupName:
     Type: String
     Default: "RaiseTech-TargetGroup"
-
-- Resources 
+```
+- Resources
+```yaml
   #ALB---------------------------------------------------------------------
   MyALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -531,13 +542,14 @@
          - TargetGroupArn: !Ref MyTargetGroup
            Type: forward
       LoadBalancerArn: !Ref MyALB
-
+```
 - 構築した環境
 ![ALB](image/10_ALB.png)
 ![TG](image/10_TG.png)
 
 ## S3作成 
-- Parameters 
+- Parameters
+```yaml
   S3Name: 
    Type: String
    Default: "raisetech-s3-231118"
@@ -557,7 +569,7 @@
       Tags:
         - Key: Name
           Value: !Ref S3Name
-
+```
 - 構築した環境
 ![S3](image/10_S3.png)
 
