@@ -12,12 +12,14 @@
 ![stack](image/10_stack.png)
 
 ## VPC作成
+- [vpc.yml](https://github.com/fumiya80/lecture-master/blob/cd846a75127c7995cd5fc4bb21d3bd71a396ef33/cloudformation/vpc.yml)
 - 構築した環境
 ![VPC](image/10_VPC1.png)
 
 ## SecurityGroup作成
+- [SG.yml](https://github.com/fumiya80/lecture-master/blob/cd846a75127c7995cd5fc4bb21d3bd71a396ef33/cloudformation/SG.yml)
+
 ### ALB用SecurityGroup
-- 構築した環境
 ![ALBSG1](image/10_ALBSG1.png)
 ![ALBSG2](image/10_ALBSG1.png)
 
@@ -32,31 +34,36 @@
 ![RDSSG2](image/10_RDSSG2.png)
 
 ## EC2作成
+- [EC2.yml](https://github.com/fumiya80/lecture-master/blob/cd846a75127c7995cd5fc4bb21d3bd71a396ef33/cloudformation/EC2.yml)
 - 構築した環境
 ![EC21](image/10_EC21.png)
 ![EC22](image/10_EC22.png)
 
 ## IAM作成
+- [S3Accesslole.yml](https://github.com/fumiya80/lecture-master/blob/cd846a75127c7995cd5fc4bb21d3bd71a396ef33/cloudformation/S3Accesslole.yml)
 - 構築した環境
 ![IAM](image/10_IAM.png)
 
 ## RDS作成
+- [RDS.yml](https://github.com/fumiya80/lecture-master/blob/cd846a75127c7995cd5fc4bb21d3bd71a396ef33/cloudformation/RDS.yml)
 - 構築した環境
 ![RDS](image/10_RDS.png)
 
 ## ALB作成
+- [ALB.yml](https://github.com/fumiya80/lecture-master/blob/cd846a75127c7995cd5fc4bb21d3bd71a396ef33/cloudformation/ALB.yml)
 - 構築した環境
 ![ALB](image/10_ALB.png)
 ![TG](image/10_TG.png)
 
-## S3作成 
+## S3作成
+- [S3.yml](https://github.com/fumiya80/lecture-master/blob/cd846a75127c7995cd5fc4bb21d3bd71a396ef33/cloudformation/S3.yml)
 - 構築した環境
 ![S3](image/10_S3.png)
 
 ## 感想
 - これまで手動構築した環境をコードにすることで、各サービスの紐づきが可視化され理解が深まった。
 - サービスを自動構築するためのテンプレートは検索で出てくるが、取り入れたい機能を入れようと探すことが面白く又難しいと感じた。
-- 後々設定を変えて再度構築する際に便利にするには、どのようにParametersを設定するべきか頭を悩ませた。
+- 後々設定を変えて再度構築する際に使い回しを良くするためには、どのようにParametersを設定するべきか頭を悩ませた。
 - 今後は様々な機能を調べ盛り込んでいきたい。
 - 今回使用しなかった関数もあるので更に勉強し、理解しやすいコードが書けるようになりたい。
 
