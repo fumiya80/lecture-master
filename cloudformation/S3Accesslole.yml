@@ -8,10 +8,6 @@ Parameters:
     Type: String
     Default: "RaiseTech"
 
-  MyEC2InstanceProfileName:
-    Type: String
-    Default: "RaiseTech-EC2InstanceProfile"
-
 Resources:
   #IAMRole------------------------------------------------------------------
   MyS3AccessRole:
