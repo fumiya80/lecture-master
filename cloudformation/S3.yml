@@ -2,17 +2,17 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: lecture10-S3-template
 
 Parameters:
-  #S3----------------------------------------------------------------------
-  S3Name: 
-   Type: String
-   Default: "raisetech-s3-231118"
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: "RaiseTech"
 
 Resources:
   #S3----------------------------------------------------------------------
   MyS3:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref S3Name
+      BucketName: !Sub "${NameBase}-s3-231118"
       AccessControl: Private
       PublicAccessBlockConfiguration:
         BlockPublicAcls: True
@@ -21,11 +21,11 @@ Resources:
         RestrictPublicBuckets: True
       Tags:
         - Key: Name
-          Value: !Ref S3Name
+          Value: !Sub "${NameBase}-s3-231118"
 
 Outputs:
   #output-------------------------------------------------------------------
   MyS3:
     Value: !Ref MyS3
     Export:
-      Name: !Ref S3Name
+      Name: !Sub "${NameBase}-s3-231118-ID"

@@ -3,6 +3,11 @@ Description: lecture10-S3Accesslole-template
 
 
 Parameters:
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: "RaiseTech"
+
   MyEC2InstanceProfileName:
     Type: String
     Default: "RaiseTech-EC2InstanceProfile"
@@ -38,4 +43,4 @@ Outputs:
   MyEC2InstanceProfile:
     Value: !Ref MyEC2InstanceProfile
     Export:
-      Name: !Ref MyEC2InstanceProfileName
+      Name: !Sub "${NameBase}-MyEC2InstanceProfile-ID"

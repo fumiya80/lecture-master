@@ -4,9 +4,10 @@ Description: lecture10-RDS-template
 
 Parameters:
   #RDS----------------------------------------------------------------------
-  RDSName:
-   Type: String
-   Default: "RaiseTech-RDS"
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: "RaiseTech"
 
   RDSAZ:
     Type: AWS::EC2::AvailabilityZone::Name
@@ -16,23 +17,19 @@ Parameters:
     Type: String
     Default: "adminadmin"
 
-  RDSSubnetGroupName:
-   Type: String
-   Default: "RaiseTech-RDSSubnetGroup"
-
 Resources:
   #RDSubnetgroup------------------------------------------------------------
   MyRDSSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupDescription: "RDSSubnetGroup"
-      DBSubnetGroupName: !Ref RDSSubnetGroupName
+      DBSubnetGroupName: !Sub "${NameBase}-SubnetGroup"
       SubnetIds:
-        - !ImportValue RaiseTech-PrivateSubnet1
-        - !ImportValue RaiseTech-PrivateSubnet2
+        - !ImportValue RaiseTech-PrivateSubnet1-ID
+        - !ImportValue RaiseTech-PrivateSubnet2-ID
       Tags:
         - Key: Name
-          Value: !Ref RDSSubnetGroupName
+          Value: !Sub "${NameBase}-SubnetGroup"
 
   #RDS----------------------------------------------------------------------
   MyRDS:
@@ -41,9 +38,9 @@ Resources:
    UpdateReplacePolicy: Delete
    Properties:
      AvailabilityZone: !Ref RDSAZ
-     DBInstanceIdentifier: !Ref RDSName
+     DBInstanceIdentifier: !Sub "${NameBase}-RDS"
      VPCSecurityGroups:
-       - !ImportValue RaiseTech-RDSSG
+       - !ImportValue RaiseTech-RDSSG-ID
      DBSubnetGroupName: !Ref MyRDSSubnetGroup
      DBInstanceClass: db.t2.micro
      AllocatedStorage: 20
@@ -57,10 +54,10 @@ Resources:
      MultiAZ: false
      Tags:
        - Key: Name
-         Value: !Ref RDSName
+         Value: !Sub "${NameBase}-RDS"
 
 Outputs:
   MyRDS:
     Value: !Ref MyRDS
     Export:
-      Name: !Ref RDSName
+      Name: !Sub "${NameBase}-RDS-ID"

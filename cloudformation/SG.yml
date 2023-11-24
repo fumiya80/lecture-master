@@ -5,26 +5,19 @@ Parameters:
   MyIP:
     Description: IP address allowed to access EC2
     Type: String
-    Default: "60.147.36.53/32"
+    AllowedPattern: "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
 
-  EC2SGName:
+  NameBase:
+    Description: this is base name.
     Type: String
-    Default: "RaiseTech-EC2SG"
-
-  RDSSGName:
-    Type: String
-    Default: "RaiseTech-RDSSG"
-
-  ALBSGName:
-    Type: String
-    Default: "RaiseTech-ALBSG"
+    Default: "RaiseTech"
 
 Resources:
   #ALBSG----------------------------------------------------------------------
   MyALBSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: !Ref ALBSGName
+      GroupName: !Sub "${NameBase}-ALBSG"
       VpcId: !ImportValue RaiseTech-VPC
       GroupDescription: "Allow incoming traffic on port 80"
       SecurityGroupIngress:
@@ -34,13 +27,13 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: !Ref ALBSGName
+          Value: !Sub "${NameBase}-ALBSG"
 
   #EC2SG----------------------------------------------------------------------
   MyEC2SG:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: !Ref EC2SGName
+      GroupName: !Sub "${NameBase}-EC2SG"
       VpcId: !ImportValue RaiseTech-VPC
       GroupDescription: "Allow incoming SSH and HTTP traffic"
       SecurityGroupIngress:
@@ -57,7 +50,7 @@ Resources:
   MyRDSSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: !Ref RDSSGName
+      GroupName: !Sub "${NameBase}-RDSSG"
       VpcId: !ImportValue RaiseTech-VPC
       GroupDescription: "Allow incoming traffic on port 3306"
       SecurityGroupIngress:
@@ -71,15 +64,15 @@ Outputs:
   EC2SG:
     Value: !Ref MyEC2SG
     Export:
-      Name: !Ref EC2SGName
+      Name: !Sub "${NameBase}-EC2SG-ID"
 
   RDSSG:
     Value: !Ref MyRDSSG
     Export:
-      Name: !Ref RDSSGName
+      Name: !Sub "${NameBase}-RDSSG-ID"
 
   ALBSG:
     Value: !Ref MyALBSG
     Export:
-      Name: !Ref ALBSGName
+      Name: !Sub "${NameBase}-ALBSG-ID"
 

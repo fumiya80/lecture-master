@@ -3,15 +3,10 @@ Description: lecture10-ALB-template
 
 
 Parameters:
-  #ALB----------------------------------------------------------------------
-  ALBName:
+  NameBase:
+    Description: this is base name.
     Type: String
-    Default: "RaiseTech-ALB"
-
-  #TargetGroup--------------------------------------------------------------
-  TargetGroupName:
-    Type: String
-    Default: "RaiseTech-TargetGroup"
+    Default: "RaiseTech"
 
 Resources:
   #ALB---------------------------------------------------------------------
@@ -20,29 +15,29 @@ Resources:
     Properties:
       Type: application
       IpAddressType: ipv4
-      Name: !Ref ALBName
+      Name: !Sub "${NameBase}-ALB"
       Scheme: internet-facing
       SecurityGroups:
-        - !ImportValue RaiseTech-ALBSG
+        - !ImportValue RaiseTech-ALBSG-ID
       SubnetMappings:
-        - SubnetId: !ImportValue RaiseTech-PublicSubnet1
-        - SubnetId: !ImportValue RaiseTech-PublicSubnet2
+        - SubnetId: !ImportValue RaiseTech-PublicSubnet1-ID
+        - SubnetId: !ImportValue RaiseTech-PublicSubnet2-ID
       Tags:
         - Key: Name
-          Value: !Ref ALBName
+          Value: !Sub "${NameBase}-ALB"
 
   #TargetGroup--------------------------------------------------------------
   MyTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      VpcId: !ImportValue RaiseTech-VPC
+      VpcId: !ImportValue RaiseTech-VPC-ID
       IpAddressType: ipv4
       Protocol: HTTP  #ヘルスチェックを行う際のプロトコル
       ProtocolVersion: HTTP1
       Port: 80
       TargetType: instance
       Targets:
-        - Id: !ImportValue RaiseTech-EC2
+        - Id: !ImportValue RaiseTech-EC2-ID
           Port: 80
       HealthCheckEnabled: true                        #ヘルスチェック有効化
       HealthCheckIntervalSeconds: 60                  #ヘルスチェックの間隔
@@ -56,7 +51,7 @@ Resources:
         HttpCode: 200
       Tags:
         - Key: Name
-          Value: !Ref TargetGroupName
+          Value: !Sub "${NameBase}-ALBTG"
 
   #Listener-----------------------------------------------------------------
   ALBListener:
@@ -74,4 +69,4 @@ Outputs:
   MyEC2:
     Value: !Ref MyALB
     Export:
-      Name: !Ref ALBName
+      Name: !Sub "${NameBase}-ALB-ID"
