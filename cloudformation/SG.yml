@@ -18,7 +18,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: !Sub "${NameBase}-ALBSG"
-      VpcId: !ImportValue RaiseTech-VPC
+      VpcId: !ImportValue RaiseTech-VPC-ID
       GroupDescription: "Allow incoming traffic on port 80"
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -34,7 +34,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: !Sub "${NameBase}-EC2SG"
-      VpcId: !ImportValue RaiseTech-VPC
+      VpcId: !ImportValue RaiseTech-VPC-ID
       GroupDescription: "Allow incoming SSH and HTTP traffic"
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -51,7 +51,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: !Sub "${NameBase}-RDSSG"
-      VpcId: !ImportValue RaiseTech-VPC
+      VpcId: !ImportValue RaiseTech-VPC-ID
       GroupDescription: "Allow incoming traffic on port 3306"
       SecurityGroupIngress:
         - IpProtocol: tcp
