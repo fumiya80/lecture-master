@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: lecture10-EC2-template
+
+
+Parameters:
+  #EC2----------------------------------------------------------------------
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: "RaiseTech"
+
+  EC2ImageId:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+
+  EC2InstanceType:
+    Type: String
+    Default: "t2.micro"
+
+  EC2AZ:
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: "ap-northeast-1a"
+
+Resources:
+  #EC2KeyPair---------------------------------------------------------------
+  MyKeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: KeyPair-MyEC2
+
+  #EC2----------------------------------------------------------------------
+  MyEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone: !Ref EC2AZ
+      ImageId: !Ref EC2ImageId #AMIを選択
+      InstanceType: !Ref EC2InstanceType
+      KeyName: !Ref MyKeyPair
+      Monitoring: false
+      NetworkInterfaces:
+        - GroupSet:
+            - !ImportValue RaiseTech-EC2SG-ID
+          SubnetId: !ImportValue RaiseTech-MyPublicSubnet1-ID
+          AssociatePublicIpAddress: true #インスタンスにIPアドレスを割り当てる
+          DeviceIndex: "0"
+      IamInstanceProfile: !ImportValue RaiseTech-S3AccessRole-name #IAMroleを付与
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-EC2"
+
+Outputs:
+  #output-------------------------------------------------------------------
+  MyEC2:
+    Value: !Ref MyEC2
+    Export:
+      Name: !Sub "${NameBase}-EC2-ID"

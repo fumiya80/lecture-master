@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: lecture10-RDS-template
+
+
+Parameters:
+  #RDS----------------------------------------------------------------------
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: "RaiseTech"
+
+  RDSAZ:
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: "ap-northeast-1a"
+
+Resources:
+  #RDSubnetgroup------------------------------------------------------------
+  MyRDSSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "RDSSubnetGroup"
+      DBSubnetGroupName: !Sub "${NameBase}-SubnetGroup"
+      SubnetIds:
+        - !ImportValue RaiseTech-MyPrivateSubnet1-ID
+        - !ImportValue RaiseTech-MyPrivateSubnet2-ID
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-SubnetGroup"
+
+  #RDS----------------------------------------------------------------------
+  MyRDS:
+   Type: AWS::RDS::DBInstance
+   DeletionPolicy: Delete
+   UpdateReplacePolicy: Delete
+   Properties:
+     AvailabilityZone: !Ref RDSAZ
+     DBInstanceIdentifier: !Sub "${NameBase}-RDS1"
+     VPCSecurityGroups:
+       - !ImportValue RaiseTech-RDSSG-ID
+     DBSubnetGroupName: !Ref MyRDSSubnetGroup
+     DBInstanceClass: db.t2.micro
+     AllocatedStorage: 20
+     Engine: mysql
+     StorageType: gp2
+     MasterUsername: admin
+     MasterUserPassword: "{{resolve:ssm-secure:RaiseTech-RDS-password1:1}}" # 事前にSSM Parameterにて設定必要 SSM ParameterのSecureStringパスワードを参照
+     CopyTagsToSnapshot: false                             #スナップショットにタグを関連付ける
+     DeleteAutomatedBackups: true                          #RDS削除時に生成されるスナップショットの削除
+     PubliclyAccessible: false
+     MultiAZ: false
+     Tags:
+       - Key: Name
+         Value: !Sub "${NameBase}-RDS"
+
+Outputs:
+  MyRDS:
+    Value: !Ref MyRDS
+    Export:
+      Name: !Sub "${NameBase}-RDS-name"

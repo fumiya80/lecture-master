@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: lecture10-S3-template
+
+Parameters:
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: "RaiseTech"
+
+Resources:
+  #S3----------------------------------------------------------------------
+  MyS3:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${NameBase}-s3-231118"
+      AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-s3-231118"
+
+Outputs:
+  #output-------------------------------------------------------------------
+  MyS3:
+    Value: !Ref MyS3
+    Export:
+      Name: !Sub "${NameBase}-s3-name"

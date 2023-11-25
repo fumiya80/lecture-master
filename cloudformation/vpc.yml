@@ -1,0 +1,217 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: lecture10-vpc-template
+
+
+
+Parameters:
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: "RaiseTech"
+
+  #vpc----------------------------------------------------------------------
+  VpcCidrBlock:
+    Description: Input a VPC IPv4 CidrBlock.
+    Type: String
+    Default: "10.0.0.0/16"
+
+  #publicsubnet-------------------------------------------------------------
+  AZ1:
+    Description: Input a AZ where Public Subnet will be created.
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: "ap-northeast-1a"
+  PublicSubnet1CidrBlock:
+    Description: Input a Public Subnet IPv4 CidrBlock.
+    Type: String
+    Default: "10.0.0.0/20"
+
+  AZ2:
+    Description: Input a AZ where Public Subnet will be created.
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: "ap-northeast-1c"
+  PublicSubnet2CidrBlock:
+    Description: Input a Public Subnet IPv4 CidrBlock.
+    Type: String
+    Default: "10.0.64.0/20"
+
+  #privatesubnet------------------------------------------------------------
+  AZ3:
+    Description: Input a AZ where Private Subnet will be created.
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: "ap-northeast-1a"
+  PrivateSubnet1CidrBlock:
+    Description: Input a Private Subnet IPv4 CidrBlock.
+    Type: String
+    Default: "10.0.16.0/20"
+
+  AZ4:
+    Description: Input a AZ where Private Subnet will be created.
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: "ap-northeast-1c"
+  PrivateSubnet2CidrBlock:
+    Description: Input a Private Subnet IPv4 CidrBlock.
+    Type: String
+    Default: "10.0.32.0/20"
+
+Resources:
+  #vpc----------------------------------------------------------------------
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidrBlock
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-VPC"
+
+  #igw----------------------------------------------------------------------
+  MyInternetGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-IGW"
+  MyVPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref MyInternetGW
+      VpcId: !Ref MyVPC
+
+  #publicsubnet-------------------------------------------------------------   
+  MyPublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref AZ1
+      CidrBlock: !Ref PublicSubnet1CidrBlock
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-PublicSubnet1"
+      VpcId: !Ref MyVPC
+
+  MyPublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref AZ2
+      CidrBlock: !Ref PublicSubnet2CidrBlock
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-PublicSubnet2"
+      VpcId: !Ref MyVPC
+
+  #privatesubnet------------------------------------------------------------
+  MyPrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref AZ3
+      CidrBlock: !Ref PrivateSubnet1CidrBlock
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-PrivateSubnet1"
+      VpcId: !Ref MyVPC
+
+  MyPrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref AZ4
+      CidrBlock: !Ref PrivateSubnet2CidrBlock
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-PrivateSubnet1"
+      VpcId: !Ref MyVPC
+
+  #Publicroutetable------------------------------------------------------------
+  MyPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-PublicRouteTable"
+      VpcId: !Ref MyVPC
+
+  MyPublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref MyInternetGW
+      RouteTableId: !Ref MyPublicRouteTable
+
+  MyPublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref MyPublicRouteTable
+      SubnetId: !Ref MyPublicSubnet1
+
+  MyPublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref MyPublicRouteTable
+      SubnetId: !Ref MyPublicSubnet2
+
+  #Privateroutetable----------------------------------------------------------
+  MyPrivateRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-PrivateRouteTable1"
+      VpcId: !Ref MyVPC
+
+  MyPrivateRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${NameBase}-PrivateRouteTable2"
+      VpcId: !Ref MyVPC
+
+  MyPrivateSubnet1RouteTable1Association:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref MyPrivateRouteTable1
+      SubnetId: !Ref MyPrivateSubnet1
+
+  MyPrivateSubnet2RouteTable2Association:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref MyPrivateRouteTable2
+      SubnetId: !Ref MyPrivateSubnet2
+
+Outputs:
+ #Outputs-------------------------------------------------------------------
+  MyVPC:
+    Value: !Ref MyVPC
+    Export:
+      Name: !Sub "${NameBase}-VPC-ID"
+
+  MyPublicSubnet1:
+   Value: !Ref MyPublicSubnet1
+   Export:
+     Name: !Sub "${NameBase}-MyPublicSubnet1-ID"
+
+  MyPublicSubnet2:
+   Value: !Ref MyPublicSubnet2
+   Export:
+     Name: !Sub "${NameBase}-MyPublicSubnet2-ID"
+
+  MyPrivateSubnet1:
+    Value: !Ref MyPrivateSubnet1
+    Export:
+      Name: !Sub "${NameBase}-MyPrivateSubnet1-ID"
+
+  MyPrivateSubnet2:
+    Value: !Ref MyPrivateSubnet2
+    Export:
+      Name: !Sub "${NameBase}-MyPrivateSubnet2-ID"
+
+  PublicRouteTable:
+    Value: !Ref MyPublicRouteTable
+    Export:
+      Name: !Sub "${NameBase}-MyPublicRouteTable-ID"
+
+
