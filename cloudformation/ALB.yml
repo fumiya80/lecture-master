@@ -20,8 +20,8 @@ Resources:
       SecurityGroups:
         - !ImportValue RaiseTech-ALBSG-ID
       SubnetMappings:
-        - SubnetId: !ImportValue RaiseTech-PublicSubnet1-ID
-        - SubnetId: !ImportValue RaiseTech-PublicSubnet2-ID
+        - SubnetId: !ImportValue RaiseTech-MyPublicSubnet1-ID
+        - SubnetId: !ImportValue RaiseTech-MyPublicSubnet2-ID
       Tags:
         - Key: Name
           Value: !Sub "${NameBase}-ALB"

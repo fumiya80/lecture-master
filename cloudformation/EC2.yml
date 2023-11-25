@@ -4,10 +4,9 @@ Description: lecture10-EC2-template
 
 Parameters:
   #EC2----------------------------------------------------------------------
-  NameBase:
-    Description: this is base name.
-    Type: String
-    Default: "RaiseTech"
+  EC2Name:
+   Type: String
+   Default: "RaiseTech-EC2"
 
   EC2ImageId:
     Type: AWS::SSM::Parameter::Value<String>
@@ -39,18 +38,18 @@ Resources:
       Monitoring: false
       NetworkInterfaces:
         - GroupSet:
-            - !ImportValue RaiseTech-EC2SG-ID
-          SubnetId: !ImportValue RaiseTech-PublicSubnet1-ID
+            - !ImportValue RaiseTech-EC2SG
+          SubnetId: !ImportValue RaiseTech-PublicSubnet1
           AssociatePublicIpAddress: true #インスタンスにIPアドレスを割り当てる
           DeviceIndex: "0"
-      IamInstanceProfile: !ImportValue RaiseTech-EC2InstanceProfile-ID #IAMroleを付与
+      IamInstanceProfile: !ImportValue RaiseTech-EC2InstanceProfile #IAMroleを付与
       Tags:
         - Key: Name
-          Value: !Sub "${NameBase}-EC2"
+          Value: !Ref EC2Name
 
 Outputs:
   #output-------------------------------------------------------------------
   MyEC2:
     Value: !Ref MyEC2
     Export:
-      Name: !Sub "${NameBase}-EC2-ID"
+      Name: !Ref EC2Name
