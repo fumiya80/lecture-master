@@ -43,7 +43,7 @@ Resources:
           SubnetId: !ImportValue RaiseTech-MyPublicSubnet1-ID
           AssociatePublicIpAddress: true #インスタンスにIPアドレスを割り当てる
           DeviceIndex: "0"
-      IamInstanceProfile: !ImportValue RaiseTech-EC2InstanceProfile-ID #IAMroleを付与
+      IamInstanceProfile: !ImportValue RaiseTech-S3AccessRole-name #IAMroleを付与
       Tags:
         - Key: Name
           Value: !Sub "${NameBase}-EC2"

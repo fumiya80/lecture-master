@@ -69,4 +69,4 @@ Outputs:
   MyEC2:
     Value: !Ref MyALB
     Export:
-      Name: !Sub "${NameBase}-ALB-ID"
+      Name: !Sub "${NameBase}-ALB-ARN"

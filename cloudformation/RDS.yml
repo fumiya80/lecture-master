@@ -56,4 +56,4 @@ Outputs:
   MyRDS:
     Value: !Ref MyRDS
     Export:
-      Name: !Sub "${NameBase}-RDS-ID"
+      Name: !Sub "${NameBase}-RDS-name"
