@@ -3,7 +3,7 @@
 - 第10回で作成したcloudformationテンプレートに対しコードチェックを行う。
 - 提供されたコンフィグファイルをローカルリポジトリにて組み込む。
 - リモートリポジトリにプッシュするとcfn-lintが自動的に実行され、Cloudformationテンプレートのコードチェックが行われる。
-[config.yml](https://github.com/fumiya80/lecture-master/blob/cd846a75127c7995cd5fc4bb21d3bd71a396ef33/.circleci/config.yml)
+[config.yml](./.circleci/config.yml)
 
 ### CircleCI動作確認
 ![test1](image/12_test1.png)
