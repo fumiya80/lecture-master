@@ -11,5 +11,5 @@
 ### cloudformationテンプレートに対してコードチェック
 ![test2](image/12_test2.png)
 
-- エラー内容を修正し再度コードチェック
+- エラー内容を修正し再度コードチェック  
 ![test3](image/12_test3.png)
