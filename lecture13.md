@@ -1,22 +1,16 @@
-version: 2.1
+# 第13回課題提出
+## CircleCIにてCloudFormation、Ansible、Serverspec処理を追加
+- CloudFormationテンプレート(第10回で作成済)を用いインフラ構築を行う。
+- サーバーの環境構築とアプリのデプロイ(第5回で実施済)をコード化しAnsibleの処理を行う。
+- Serverspecのテスト(第11回で作成済)を行う。
+[config.yml](./.circleci/config.yml)
 
-orbs:
-  python: circleci/python@2.0.3
-  aws-cli: circleci/aws-cli@4.1.2
-  ansible: orbss/ansible-playbook@0.0.5
-  ruby: circleci/ruby@2.1.0
-
-jobs:
-  cfn-lint:
-    executor: python/default
-    steps:
-      - checkout
-      - run: pip install cfn-lint
-      - run:
-          name: run cfn-lint
-          command: |
-            cfn-lint -i W3002 -t cloudformation/*.yml
-
+## cfnテンプレートでのインフラ構築
+- AWS CLIを用い下記のインフラ構築を行う  
+![figure](image/13_envilonment.png)
+- circleciのconfigファイルにAWS CLIでcfnテンプレートを実行する処理を追加 詳細は[cloudformation](./cloudformation)ディレクトリ参照
+```
+# 一部抜粋
   cfn-execute:
     executor: aws-cli/default
     steps:
@@ -35,15 +29,14 @@ jobs:
             aws cloudformation deploy --stack-name lecture13-RDS --template-file cloudformation/RDS.yml
             aws cloudformation deploy --stack-name lecture13-ALB --template-file cloudformation/ALB.yml
             aws cloudformation deploy --stack-name lecture13-S3 --template-file cloudformation/S3.yml
-            aws cloudformation describe-stacks --stack-name lecture13-EC2 --query 'Stacks[].Outputs[1].OutputValue' --output text > /tmp/AWS_EC2_HOST.txt
-            aws cloudformation describe-stacks --stack-name lecture13-ALB --query 'Stacks[].Outputs[0].OutputValue' --output text > /tmp/AWS_ALB_HOST.txt
-            aws cloudformation describe-stacks --stack-name lecture13-RDS --query 'Stacks[].Outputs[1].OutputValue' --output text > /tmp/AWS_DB_HOST.txt
-            aws cloudformation describe-stacks --stack-name lecture13-RDS --query 'Stacks[].Parameters[2].ParameterValue' --output text > /tmp/AWS_DB_USER.txt
-            aws ssm get-parameters --query Parameters[].Value --output text --name RaiseTech-RDS-password1 --with-decryption > /tmp/AWS_DB_PW.txt
-      - persist_to_workspace:
-          root: /tmp
-          paths: AWS*
+```
+- circleciでの実行結果  
+![cfn](image/13_cfn.png)
 
+## ansibleでの環境構築とアプリのデプロイ
+- circleciのconfigファイルにAnsibleのPlaybookを実行する処理を追加 詳細は[ansible](./ansible)ディレクトリ参照
+```
+# 一部抜粋
   ansible-execute:
     executor: ansible/default
     steps:
@@ -66,7 +59,18 @@ jobs:
       - ansible/playbook:
           playbook: ansible/playbook.yml
           playbook-options: '-u ec2-user -i ansible/inventory --private-key /home/ec2-user/.ssh/id_rsa'
+```
+- circleciでの実行結果  
+![ansible](image/13_ansible.png)  
+- ALBのDNS名でアクセスし、アプリが動作することを確認  
+![app](image/13_app-deploy.jpg)  
+- S3に保存されていることを確認  
+![s3](image/13_s3.png)
 
+## Serverspecによるテスト
+- circleciのconfigファイルにServerspecのテストを実行する処理を追加 詳細は[serverspec](./serverspec]ディレクトリ参照
+```
+# 一部抜粋
   serverspec-execute:
     executor: ruby/default
     steps:
@@ -80,17 +84,6 @@ jobs:
           command: |
             cd serverspec
             bundle exec rake spec
-
-workflows:
-  raisetech:
-    jobs:
-      - cfn-lint
-      - cfn-execute:
-          requires:
-            - cfn-lint
-      - ansible-execute:
-          requires:
-            - cfn-execute
-      - serverspec-execute:
-          requires:
-            - ansible-execute
+```
+- circleciでの実行結果  
+![serverspec](image/13_serverspec.png)

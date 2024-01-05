@@ -7,7 +7,6 @@
     force: yes
   register: git_clone
 
-# unicornインストール
 - name: bundle install
   shell: bash -lc "bundle install"
   args: 
@@ -34,30 +33,13 @@
     - { src: 'storage.yml.j2', dest: 'storage.yml' }
     - { src: 'unicorn.rb.j2', dest: 'unicorn.rb' }
 
-# アプリケーションの初期セットアップを実行
 - name: Run application setup script
   shell: bash -lc "bin/setup"
   args:
     chdir: "{{ sample_app_dir }}"
-#  when: mysql_repo_installed.changed  # 上記で変更した変数名に合わせて変更しました
 
-# アセットを事前コンパイル
 - name: Precompile application assets
   shell: bash -lc "rails assets:precompile"
   args:
     chdir: "{{ sample_app_dir }}"
-
-
-#- name: copy database.yml.sample
-#  ansible.builtin.copy:
-#    src: {{ sample_app_dir }}/config/database.yml.sample
-#    dest: {{ sample_app_dir }}/config/database.yml
-
-#- name: edit database.yml
-#  become_user: root
-#  ansible.builtin.lineinfile:
-#    path: "{{ sample_app_dir }}/config/database.yml"
-#    regexp: 
-#    line:
-
 

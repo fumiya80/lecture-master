@@ -5,12 +5,6 @@
   changed_when: no
   ignore_errors: yes
 
-#- name: check bundler install
-#  shell: bash -lc "bundler version | grep {{ bundler_version }}"
-#  register: check_bundler_installed
-#  changed_when: no
-#  ignore_errors: yes
-
 - name: install bundler
   gem: 
     name: bundler
@@ -18,4 +12,3 @@
     executable: /home/ec2-user/.rbenv/shims/gem
     user_install: no
   when: check_bundler_installed is failed
-

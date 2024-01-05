@@ -35,12 +35,6 @@
     dest: /home/ec2-user/.rbenv/plugins/ruby-build
   when: check_rbenv_installed.failed
 
-#- name: check ruby install
-#  shell: bash -lc "rbenv version | grep {{ ruby_version }}"
-#  register: check_ruby_installed
-#  changed_when: no
-#  ignore_errors: yes
-
 - name: install ruby
   shell: bash -lc "rbenv install {{ ruby_version }}"
   when: check_rbenv_installed.failed

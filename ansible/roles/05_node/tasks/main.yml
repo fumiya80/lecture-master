@@ -15,4 +15,3 @@
 - name: install node
   shell: bash -lc "nvm install {{ node_version }}"
   when: check_node_installed is failed
-
