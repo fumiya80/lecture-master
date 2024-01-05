@@ -1,0 +1,21 @@
+- hosts: server
+  roles:
+    - { role: 01_yum, tags: yum }
+    - { role: 02_ruby, tags: ruby }
+    - { role: 03_bundler, tags: bundler }
+    - { role: 04_rails, tags: rails }
+    - { role: 05_node, tags: node }
+    - { role: 06_yarn, tags: yarn }
+    - { role: 07_mysql, tags: mysql }
+    - { role: 08_app, tags: app }
+    - { role: 09_nginx, tags: nginx }
+
+  vars:
+    ansible_become_method: sudo
+    sample_app_dir: /var/www/raisetech-live8-sample-app
+    aws_alb_host : "{{ (lookup('env','AWS_ALB_HOST')) }}"
+    aws_ec2_host : "{{ (lookup('env','AWS_EC2_HOST')) }}"
+    aws_db_user: "{{ (lookup('env','AWS_DB_USER')) }}"
+    aws_db_pw : "{{ (lookup('env','AWS_DB_PW')) }}"
+    aws_db_host : "{{ (lookup('env','AWS_DB_HOST')) }}"
+    aws_s3_bucket: "{{ (lookup('env','AWS_S3_BUCKET')) }}" #事前に設定必要

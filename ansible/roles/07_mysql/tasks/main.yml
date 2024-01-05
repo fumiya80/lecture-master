@@ -1,0 +1,49 @@
+---
+- name: Remove MariaDB
+  become: true
+  yum:
+    name: mariadb-libs
+    state: absent
+
+- name: Install MySQL
+  become: true
+#  become_user: root
+  yum:
+    name: 'https://repo.mysql.com//mysql80-community-release-el7-7.noarch.rpm'
+    state: present
+  register: mysql_installed
+
+- name: Import GPG key 
+  become: true
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+  when: mysql_installed.changed
+
+- name: install mysql-community-client
+  become: true
+  yum:
+    name: mysql-community-client
+    state: present
+#  when: mysql_installed.changed
+
+- name: Install mysql-community-devel
+  become: true
+  yum:
+    name: mysql-community-devel
+    state: present
+#  when: mysql_installed.changed
+
+# アプリケーションの初期セットアップを実行
+#- name: Run application setup script
+#  shell: bash -lc "bin/setup"
+#  args:
+#    chdir: "{{ sample_app_dir }}"
+#  when: mysql_repo_installed.changed  # 上記で変更した変数名に合わせて変更しました
+
+# アセットを事前コンパイル
+#- name: Precompile application assets
+#  shell: bash -lc "rails assets:precompile"
+#  args:
+#    chdir: "{{ sample_app_dir }}"
+

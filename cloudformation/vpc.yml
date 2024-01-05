@@ -13,7 +13,7 @@ Parameters:
   VpcCidrBlock:
     Description: Input a VPC IPv4 CidrBlock.
     Type: String
-    Default: "10.0.0.0/16"
+    Default: "10.0.0.1/16"
 
   #publicsubnet-------------------------------------------------------------
   AZ1:
@@ -23,7 +23,7 @@ Parameters:
   PublicSubnet1CidrBlock:
     Description: Input a Public Subnet IPv4 CidrBlock.
     Type: String
-    Default: "10.0.0.0/20"
+    Default: "10.0.0.1/20"
 
   AZ2:
     Description: Input a AZ where Public Subnet will be created.
@@ -32,7 +32,7 @@ Parameters:
   PublicSubnet2CidrBlock:
     Description: Input a Public Subnet IPv4 CidrBlock.
     Type: String
-    Default: "10.0.64.0/20"
+    Default: "10.0.64.2/20"
 
   #privatesubnet------------------------------------------------------------
   AZ3:
@@ -42,7 +42,7 @@ Parameters:
   PrivateSubnet1CidrBlock:
     Description: Input a Private Subnet IPv4 CidrBlock.
     Type: String
-    Default: "10.0.16.0/20"
+    Default: "10.0.16.1/20"
 
   AZ4:
     Description: Input a AZ where Private Subnet will be created.
@@ -51,7 +51,7 @@ Parameters:
   PrivateSubnet2CidrBlock:
     Description: Input a Private Subnet IPv4 CidrBlock.
     Type: String
-    Default: "10.0.32.0/20"
+    Default: "10.0.32.1/20"
 
 Resources:
   #vpc----------------------------------------------------------------------
@@ -137,7 +137,7 @@ Resources:
   MyPublicRoute:
     Type: AWS::EC2::Route
     Properties:
-      DestinationCidrBlock: 0.0.0.0/0
+      DestinationCidrBlock: 0.0.0.1/0
       GatewayId: !Ref MyInternetGW
       RouteTableId: !Ref MyPublicRouteTable
 
