@@ -105,4 +105,3 @@ workflows:
       - serverspec-execute:
           requires:
             - ansible-execute
-
