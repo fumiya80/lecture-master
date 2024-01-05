@@ -40,16 +40,6 @@
     executor: ansible/default
     steps:
       - checkout
-      - attach_workspace:
-          at: /tmp
-      - run:
-          name: set-env-vars
-          command: |
-            echo "export AWS_EC2_HOST=$(cat /tmp/AWS_EC2_HOST.txt)" >> $BASH_ENV
-            echo "export AWS_ALB_HOST=$(cat /tmp/AWS_ALB_HOST.txt)" >> $BASH_ENV
-            echo "export AWS_DB_HOST=$(cat /tmp/AWS_DB_HOST.txt)" >> $BASH_ENV
-            echo "export AWS_DB_USER=$(cat /tmp/AWS_DB_USER.txt)" >> $BASH_ENV
-            echo "export AWS_DB_PW=$(cat /tmp/AWS_DB_PW.txt)" >> $BASH_ENV
       - add_ssh_keys:
           fingerprints:
             - '90:f2:ce:d1:d1:f0:59:9c:58:db:e1:14:cb:35:5f:6a'
@@ -67,7 +57,7 @@
 ![s3](image/13_s3.png)
 
 ## Serverspecによるテスト
-- circleciのconfigファイルにServerspecのテストを実行する処理を追加 詳細は[serverspec](./serverspec]ディレクトリ参照
+- circleciのconfigファイルにServerspecのテストを実行する処理を追加 詳細は[serverspec](./serverspec)ディレクトリ参照
 ```
 # 一部抜粋
   serverspec-execute:
