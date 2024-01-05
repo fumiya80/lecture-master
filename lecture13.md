@@ -6,7 +6,7 @@
 
 ## cfnテンプレートでのインフラ構築
 - AWS CLIを用い下記のインフラ構築を行う  
-![figure](image/13_envilonment.png)
+![figure](image/13_environment.png)
 - circleciのconfigファイルにAWS CLIでcfnテンプレートを実行する処理を追加 詳細は[cloudformation](./cloudformation)ディレクトリ参照
 ```
 # 一部抜粋
