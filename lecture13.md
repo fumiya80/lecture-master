@@ -3,7 +3,6 @@
 - CloudFormationテンプレート(第10回で作成済)を用いインフラ構築を行う。
 - サーバーの環境構築とアプリのデプロイ(第5回で実施済)をコード化しAnsibleの処理を行う。
 - Serverspecのテスト(第11回で作成済)を行う。
-[config.yml](./.circleci/config.yml)
 
 ## cfnテンプレートでのインフラ構築
 - AWS CLIを用い下記のインフラ構築を行う  
