@@ -70,3 +70,8 @@ Outputs:
     Value: !Ref MyALB
     Export:
       Name: !Sub "${NameBase}-ALB-ARN"
+
+  ALBDNSName:
+    Value: !GetAtt MyALB.DNSName
+    Export:
+      Name: !Sub "${NameBase}-ALB-DNS-Name"

@@ -2,10 +2,6 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: lecture10-SecurityGroup-template
 
 Parameters:
-  MyIP:
-    Description: IP address allowed to access EC2
-    Type: String
-
   NameBase:
     Description: this is base name.
     Type: String
@@ -37,13 +33,13 @@ Resources:
       GroupDescription: "Allow incoming SSH and HTTP traffic"
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: !Ref MyIP
-        - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
-          SourceSecurityGroupId: !Ref MyALBSG  #このセキュリティグループとの通信は許可する
+          SourceSecurityGroupId: !Ref MyALBSG
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
 
   #RDSSG----------------------------------------------------------------------
   MyRDSSG:
