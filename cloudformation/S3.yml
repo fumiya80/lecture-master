@@ -5,14 +5,14 @@ Parameters:
   NameBase:
     Description: this is base name.
     Type: String
-    Default: "RaiseTech"
+    Default: "raisetech"
 
 Resources:
   #S3----------------------------------------------------------------------
   MyS3:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "${NameBase}-s3-231118"
+      BucketName: !Sub "${NameBase}-s3-231222"
       PublicAccessBlockConfiguration:
         BlockPublicAcls: True
         BlockPublicPolicy: True
@@ -20,7 +20,7 @@ Resources:
         RestrictPublicBuckets: True
       Tags:
         - Key: Name
-          Value: !Sub "${NameBase}-s3-231118"
+          Value: !Sub "${NameBase}-s3-231222"
 
 Outputs:
   #output-------------------------------------------------------------------

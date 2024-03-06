@@ -12,6 +12,10 @@ Parameters:
   RDSAZ:
     Type: AWS::EC2::AvailabilityZone::Name
     Default: "ap-northeast-1a"
+  
+  RDSUser:
+    Type: String
+    Default: "admin"
 
 Resources:
   #RDSubnetgroup------------------------------------------------------------
@@ -42,7 +46,7 @@ Resources:
      AllocatedStorage: 20
      Engine: mysql
      StorageType: gp2
-     MasterUsername: admin
+     MasterUsername: !Ref RDSUser
      MasterUserPassword: "{{resolve:ssm-secure:RaiseTech-RDS-password1:1}}" # 事前にSSM Parameterにて設定必要 SSM ParameterのSecureStringパスワードを参照
      CopyTagsToSnapshot: false                             #スナップショットにタグを関連付ける
      DeleteAutomatedBackups: true                          #RDS削除時に生成されるスナップショットの削除
@@ -57,3 +61,8 @@ Outputs:
     Value: !Ref MyRDS
     Export:
       Name: !Sub "${NameBase}-RDS-name"
+
+  RDSEndpoint:
+    Value: !GetAtt MyRDS.Endpoint.Address
+    Export:
+      Name: !Sub "${NameBase}-RDS-Endpoint"

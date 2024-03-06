@@ -18,7 +18,7 @@ Resources:
         Statement: 
           - Effect: Allow
             Principal:
-              Service:  #許可の対象  
+              Service:
                 - ec2.amazonaws.com
             Action:
               - sts:AssumeRole
