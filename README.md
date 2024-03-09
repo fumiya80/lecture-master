@@ -1,7 +1,7 @@
 # 学習内容
 
-## 最終成果物の構成図
-![figure](image/14_figure.png)
+## 最終課題の構成図
+![figure](image/14_kouseizu.png)
 
 以下補足
 - CircleCIを用いgithubのリポジトリにプッシュし①∼③を自動で走らせ、AWS環境の構築/EC2の環境設定/EC2のテストを自動で行う事に成功しました。
