@@ -6,7 +6,7 @@
 以下補足
 - CircleCIを用い構成図内①∼③を走らせ、AWS環境の構築/EC2の環境設定/EC2のテストを自動で行いました。
 - ①Create…CloudFormationTempleatを作成しVPC・EC2・RDS・ALB・S3を自動で作成しました。[テンプレートはこちら](./cloudformation)
-- ③Setup…アプリをデプロイするため必要なもののインストール及びアプリの起動を自動化しました。[実行内容はこちら](./ansible)
+- ②Setup…アプリをデプロイするため必要なもののインストール及びアプリの起動を自動化しました。[実行内容はこちら](./ansible)
 - ③Test…②で設定した環境を自動で幾つかのテストを行いました。[テスト内容はこちら](./serverspec/spec/3.112.229.42/sample_spec.rb)
 
 ## 講義内容
