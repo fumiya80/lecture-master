@@ -4,10 +4,10 @@
 ![figure](image/14_figure.png)
 
 以下補足
-- CircleCIを用いgithubのリポジトリにプッシュすることで①∼③を自動で走らせ、構成図で示されることを全て自動で行う事に成功しました。
-- ①Create…CloudFormationTempleatを作成しVPC・EC2・RDS・ALB・S3を自動で作成しました。テンプレートはこちら
-- ③Setup…アプリをデプロイするため必要なもののインストール及びアプリの起動を自動化しました。実行内容はこちら
-- ③Test…②で設定した環境を自動で幾つかのテストを行いました。テスト内容はこちら
+- CircleCIを用いgithubのリポジトリにプッシュし①∼③を自動で走らせ、AWS環境の構築/EC2の環境設定/EC2のテストを自動で行う事に成功しました。
+- ①Create…CloudFormationTempleatを作成しVPC・EC2・RDS・ALB・S3を自動で作成しました。[テンプレートはこちら](./cloudformation)
+- ③Setup…アプリをデプロイするため必要なもののインストール及びアプリの起動を自動化しました。[実行内容はこちら](./ansible)
+- ③Test…②で設定した環境を自動で幾つかのテストを行いました。[テスト内容はこちら](./serverspec/spec/3.112.229.42/sample_spec.rb)
 
 ## 講義内容
 |講義番号|学習テーマ|学習内容|提出物|
