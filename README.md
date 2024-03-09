@@ -1,7 +1,7 @@
 # 学習内容
 
 ## 最終課題の構成図
-![figure](image/14_kouseizu.png)
+![figure](image/14_figure.png)
 
 以下補足
 - CircleCIを用いgithubのリポジトリにプッシュし①∼③を自動で走らせ、AWS環境の構築/EC2の環境設定/EC2のテストを自動で行う事に成功しました。
@@ -18,14 +18,14 @@
 |4|AWS上でのネットワークの手動構築とアプリ起動<br>（第4~9回講座）|- VPC,EC2,RDSの作成<br>- EC2とRDSの接続確認|[lecture04.md](./lecture04.md)|
 |5||- EC2でのアプリケーションのデプロイ<br>- ALB,S3組込み<br>- 構成図の作成|[lecture05.md](./lecture05.md)|
 |6||- CloudTrailのイベント確認<br>- CloudWatchアラームの設定<br>- AWS利用料見積|[lecture06.md](./lecture06.md)|
-|7||- AWSセキュリティ対策|
+|7||- AWSセキュリティ対策|ー|
 |8||- 第4・5回講義課題の実演|ー|
 |9||- 第4・5回講義課題の実演|ー|
 |10|これまでの環境を自動構築<br>（第10~15回講座）|- AWS環境のコード化(CloudFormation)|[lecture10.md](./lecture10.md)|
 |11||- 第5回作成のEC2へテスト(ServerSpec)|[lecture11.md](./lecture11.md)|
 |12||- CircleCIでサンプルコンフィグを起動|[lecture12.md](./lecture12.md)|
 |13||- CircleCiでCloudFormation、Ansible、ServerSpecを自動で実行|[lecture13.md](./lecture13.md)|
-|14||- 第14回講義課題の実演<br>- AWS構成図と自動化処理がわかる図を作成<br>- README作成|
+|14||- 第14回講義課題の実演<br>- AWS構成図と自動化処理がわかる図を作成<br>- README作成|ー|
 |15||- 第14回講義課題の実演|ー|
 |16|エンジニアとしての心得|- 現場で必要なスキルと心持ちについて|ー|
 
