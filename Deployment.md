@@ -3,8 +3,6 @@
 ## 最終課題の構成図
 ![figure](image/figure.png)
 
-- [構成図の具体的手順はこちらから](./lecture13_steps.md)
-
 以下補足
 - CircleCIを用い構成図内①∼③を走らせ、AWS環境の構築/EC2の環境設定/EC2のテストを自動で行いました。
 - ①Create…CloudFormationTempleatを作成しVPC・EC2・RDS・ALB・S3を自動で作成しました。[テンプレートはこちら](./cloudformation)
