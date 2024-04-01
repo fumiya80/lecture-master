@@ -4,7 +4,7 @@
 
 ## 1-1.CircleCi
 ### 1-1-1.概要
-- CircleCiはCI/CDツールの1種である。
+- CircleCiはCI/CDツールの1種である。  
 - CI(継続的インティグレーション)とはアプリやインフラのソースコードのテストを自動化し、これを継続的に実行すること。
 - CD(継続的デリバリー)とは各環境へのデプロイ作業を自動化し、これを継続的に実行すること。
 - CircleCiはソースコードのバージョン管理ができるgithubと連携できる
@@ -14,6 +14,10 @@
 ### 1-1-2.使用方法
 - CircleCiで行うことは.circleci/config.ymlに記載し、このファイル内容をCircleCiが実行する。
 - 下記はcircleci/config.ymlの抜粋
+- "version"とはCircleCIのバージョンのことである
+- "orbs"とはCircleCIの機能や設定を利用するためのパッケージであり(orbs一覧は公式にて)、これによりconfigファイル内で特定の設定(jobを実行する環境)として利用できる。(上記config.ymlでは"circleci/python@2.0.3"という"orbs"を"python"と命名している。)
+- "job"とはCircleCiで実行される単一のタスクで"step"の集合体であり、上記では"cfn-lint"と命名した"job"で"checkout","run"×2が"step"にあたる
+- "executor"とは"job"の実行環境を指定するものであり、上記では"orbs"で"python"と命名した設定を呼び出している
 ```
 version: 2.1
 
@@ -31,18 +35,13 @@ jobs:
           command: |
             cfn-lint -i W3002 -t cloudformation/*.yml
 ```
-- "version"とはCircleCIのバージョンのことである
-- "orbs"とはCircleCIの機能や設定を利用するためのパッケージであり(orbs一覧は公式にて)、これによりconfigファイル内で特定の設定(jobを実行する環境)として利用できる。(上記config.ymlでは"circleci/python@2.0.3"という"orbs"を"python"と命名している。)
-- "job"とはCircleCiで実行される単一のタスクで"step"の集合体であり、上記では"cfn-lint"と命名した"job"で"checkout","run"×2が"step"にあたる
-- "executor"とは"job"の実行環境を指定するものであり、上記では"orbs"で"python"と命名した設定を呼び出している
 
 ### 1-1-3.今回の用途
 - AWS環境を自動構築(CloudFormation)、アプリデプロイのためEC2を自動環境設定(ansible)、EC2の環境設定を自動テスト(serverspec)、これらのソースコードをgithubへプッシュのみし一連で行うことを可能にする
 - これで開発作業以外の工数を減らせる
 
-
 <br>
-
+<br>
 
 ## 1-2.CloudFormation(以降cfn)
 ### 1-2-1.概要
