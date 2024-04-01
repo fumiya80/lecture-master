@@ -36,9 +36,8 @@ jobs:
 - "executor"とは"job"の実行環境を指定するものであり、上記では"orbs"で"python"と命名した設定を呼び出している
 
 ### 1-1-3.今回の用途
-- AWS環境を自動構築(CloudFormation)、アプリデプロイのためEC2を自動環境設定(ansible)、EC2の環境設定を自動テスト(serverspec)、これらのソースコードをgithubへをプッシュし一連で行うことを可能にする
-- これによりインフラ環境構築→アプリデプロイのためのサーバーの環境設定→正しく環境が設定されているかテストをgithubへのプッシュで行え、サーバーでコマンドを打つ作業が全て無くなる。
-
+- AWS環境を自動構築(CloudFormation)、アプリデプロイのためEC2を自動環境設定(ansible)、EC2の環境設定を自動テスト(serverspec)、これらのソースコードをgithubへプッシュのみし一連で行うことを可能にする
+- これで開発作業以外の工数を減らせる
 
 ## 1-2.CloudFormation(以降cfn)
 ### 1-2-1.概要
@@ -103,7 +102,8 @@ describe リソースタイプ(テスト対象) do
   it { マッチャー }
 end
 ```
-- リソースタイプはテストする対象のリソースを指定、マッチャーはリソースへ期待する状態を指定する。以下一例  
+- リソースタイプはテストする対象のリソースを指定、マッチャーはリソースへ期待する状態を指定する。以下一例
+
 | リソースタイプ | 説明                                         |
 |:--|:--|
 | `command`      | コマンドの実行結果をテスト                   |
@@ -260,11 +260,9 @@ ansible_become_user=root　　#Ansibleがsudoのコマンドを使用する際�
 
 - 事前にEC2へのSSH接続のため秘密鍵をcircleci上に登録しておく  
 [秘密鍵をcircleciに設定する方法](https://qiita.com/takuyama/items/4dfebb15bd9408dd92ee)
-
 - これでCircleCiからansibleを起動できる段階となったが、ローカルから管理対象ノードへ指示を出せるかを確認することをオススメする
 - いきなりcircleciでansibleを実行すると、ansible側の問題かcircleci側の問題であるか分からなくなるため  
 [ローカルからansible実行](https://qiita.com/tx2/items/ff8d27ff479754bbc4cc)
-
 
 
 # 5.CircleCiとserverspec
@@ -301,7 +299,5 @@ options[:user] ||= "ec2-user"
 ```
 - 上記リンク先に「Serverspecはテストを実行する時specディレクトリ配下のディレクトリをテスト対象サーバとします」とある。
 - ここから“HostName”はspecディレクトリ配下のディレクトリ名をテスト対象サーバーのIPアドレスに書き換えることで解決する。
-
-
 - ここまでで全ての準備は完了。実行結果は下記  
 [実行結果](./lecture13.md)
