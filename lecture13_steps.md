@@ -11,7 +11,7 @@
 - これらからソースコードのバージョン管理/テスト/各サーバーへのデプロイを自動で行えることで、開発に集中できる
 
 ### 1-1-2.使用方法
-- CircleCiで行うことは.circleci/config.ymlに記載し、このファイル内容をCircleCiサーバが実行する。
+- CircleCiで行うことは.circleci/config.ymlに記載し、このファイル内容をCircleCiが実行する。
 - 下記はcircleci/config.ymlの抜粋
 ```
 version: 2.1
@@ -31,8 +31,7 @@ jobs:
             cfn-lint -i W3002 -t cloudformation/*.yml
 ```
 - "version"とはCircleCIのバージョンのことである
-- "orbs"とはCircleCIの機能や設定を利用するためのパッケージであり(orbs一覧は公式にて)、これによりconfigファイル内で特定の設定(jobを実行する環境)として利用できる。
-- 上記config.ymlでは"circleci/python@2.0.3"という"orbs"を"python"と命名している。
+- "orbs"とはCircleCIの機能や設定を利用するためのパッケージであり(orbs一覧は公式にて)、これによりconfigファイル内で特定の設定(jobを実行する環境)として利用できる。(上記config.ymlでは"circleci/python@2.0.3"という"orbs"を"python"と命名している。)
 - "job"とはCircleCiで実行される単一のタスクで"step"の集合体であり、上記では"cfn-lint"と命名した"job"で"checkout","run"×2が"step"にあたる
 - "executor"とは"job"の実行環境を指定するものであり、上記では"orbs"で"python"と命名した設定を呼び出している
 
@@ -41,32 +40,32 @@ jobs:
 - これによりインフラ環境構築→アプリデプロイのためのサーバーの環境設定→正しく環境が設定されているかテストをgithubへのプッシュで行え、サーバーでコマンドを打つ作業が全て無くなる。
 
 
-### CloudFormation(以降cfn)
-#### 概要
+## 1-2.CloudFormation(以降cfn)
+### 1-2-1.概要
 - cfnはインフラを自動化するために必要なIaC(Infrastructure as code)を行えるAWSのサービス。
 - IaC(Infrastructure as code)とはインフラをコード化すること。
 - インフラ自動化のメリットは。手動構築と比べて工数がかからない/再現性が高い/バージョン管理が容易であることが挙げられる
 - リソース構築内容を定義するファイルをテンプレートと呼び、それぞれのリソースの依存関係もテンプレートに記述される。
 - テンプレートを利用しCloudFormationによりプロビジョニングされたリソースの集合体をスタックと呼ぶ。
 
-#### 今回のCloudFormation用途
+### 1-2-2.今回のCloudFormation用途
 - VPC,EC2,RDS,ALB,S3を自動で作成し、AWS環境を構築する。
 
 
-### ansible
-#### 概要
+## 1-3.ansible
+### 1-3-1.概要
 - ansibleは構成管理ツールの1種である。
 - 構成管理ツールとは管理対象サーバーの設定/構成ファイルをコードで定義し、定義内容と異なる場合は予め定義した設定/構成に変更するものである。(例えばrailsはversion 7.0.4と定義すると、異なるversionの場合は7.0.4に自動で変更する)
 - これにより手動のコマンド操作でサーバを設定/構成することが不要、自動で何度行っても同じ設定/構成となる。この何度行っても設定/構成が同じになることを冪等性(べきとうせい)と呼ぶ。
 
-#### ノードと必要ファイル
+### 1-3-2.ノードと必要ファイル
 - コントロールノード(Control node)　…………設定/構成ファイルを基に指示を出すサーバー
 - 管理対象ノード(Managed node)　　　…………コントロールノードから指示を受け、設定/構成ファイルを基に管理されるサーバー
 - イベントリ(iventory)　　　　　　　…………管理対象ノードを指定するファイル、IPアドレスを記載する。
 - プレイブック(playbook)　　　　　　…………管理対象ノードに対する設定/構成を記述するファイル
 ![ansible1](image/13_ansible1.png)
 
-#### playbookの中身
+### 1-3-3.playbookの中身
 - モジュール(module)　…………playbookを構成する最小単位のこと。例として管理ノード上で指定したシェルコマンドを実行するshellmodule、管理ノード上のサービスを制御するsystemdmodule等がある
 - タスク(task)      　…………moduleのパラメーターに値を設定し実行可能となったもの。taskには固有のtask名を設定する
 - プレイ(play)        …………1つ以上のタスクを並べ、管理対象ノードと変数等を加えたものをプレイと呼ぶ。
@@ -91,12 +90,12 @@ jobs:
     　　state: started
 ```
 
-#### 今回の具体的ansible用途
+### 1-3-5.今回の具体的ansible用途
 - cfnで作成したEC2にアプリをデプロイできるよう設定/構成ファイルをコードで定義し、管理対象ノードを変更する。
 
 
-### serverspec
-#### serverspec概要
+## 1-4.serverspec
+### 1-4-1.serverspec概要
 - テスト自動化ツールの1種である。
 - テストコードはリソースタイプとマッチャーので記述される。
 ```
@@ -125,14 +124,14 @@ end
 - 存在するリソースタイプは公式にて
 [リソースタイプ](https://serverspec.org/resource_types.html)
 
-### 今回のserverspec用途
+### 1-4-2.今回のserverspec用途
 - cfnで作成したEC2にアプリをデプロイできるよう設定/構成ファイルをコードで定義し、管理対象ノードを変更する。
 
 
 
 
-## 2.手順に入る前に
-### circleciで意識すること
+# 2.手順に入る前に
+## 2-1.circleciで意識すること
 - 構成図の自動化は下記図の流れで実行される
 ![circleci1](image/13_circleci1.png)
 
@@ -145,14 +144,14 @@ end
 ![ansible2](image/13_ansible2.png)
 
 
-### cfn-ansible-serverspec間で意識すること
+## 2-2.cfn-ansible-serverspec間で意識すること
 - 下記の図でもう一つ意識することがある。
 - 図①～③の順で実行され、主にansible(EC2の環境設定)はcfnで構築されたRDSやALBの情報を基に設定ファイルを書き換えていく必要がある。
 - つまりCloudFormationで構築されたリソースで必要な情報であるRDSのエンドポイントやALBのDNS名はansibleに受け渡す(詳細は手順の中で説明)
 ![circleci2](image/13_circleci2.png)
 
 
-## 3.CircleCiとcfn
+# 3.CircleCiとcfn
 - cfnで実行するjobは下記2つで、cfnテンプレートのコードチェックとデプロイである(configファイルより一部抜粋)
 ```
   cfn-lint:
@@ -214,9 +213,7 @@ aws ssm get-parameters --query Parameters[].Value --output text --name RaiseTech
 ```
 
 
-
-
-## 4.CircleCiとansible
+# 4.CircleCiとansible
 - ansibleで実行するjobは下記であり、cfnでのエクスポート値の取込み、circleciサーバへansibleインストール、playbookの実行である(configファイルより抜粋)
 ```
 -   ansible-execute:
@@ -261,16 +258,16 @@ ansible_user=ec2-user　　#SSH接続する際のユーザー名
 ansible_become_user=root　　#Ansibleがsudoのコマンドを使用する際のユーザー名
 ```
 
-- 事前にEC2へのSSH接続のため秘密鍵をcircleci上に登録しておく
+- 事前にEC2へのSSH接続のため秘密鍵をcircleci上に登録しておく  
 [秘密鍵をcircleciに設定する方法](https://qiita.com/takuyama/items/4dfebb15bd9408dd92ee)
 
 - これでCircleCiからansibleを起動できる段階となったが、ローカルから管理対象ノードへ指示を出せるかを確認することをオススメする
-- いきなりcircleciでansibleを実行すると、ansible側の問題かcircleci側の問題であるか分からなくなるため
+- いきなりcircleciでansibleを実行すると、ansible側の問題かcircleci側の問題であるか分からなくなるため  
 [ローカルからansible実行](https://qiita.com/tx2/items/ff8d27ff479754bbc4cc)
 
 
 
-## 5.CircleCiとserverspec
+# 5.CircleCiとserverspec
 - serverspecで実行するjobは下記であり、serverspecのテストに必要な依存関係をインストールし、テストの実行である(configファイルより抜粋)
 ```
   serverspec-execute:
@@ -287,7 +284,7 @@ ansible_become_user=root　　#Ansibleがsudoのコマンドを使用する際�
             cd serverspec
             bundle exec rake spec
 ```
-- 事前にserverspecの設定ファイルを入手し保存しておく
+- 事前にserverspecの設定ファイルを入手し保存しておく  
 [秘密鍵をcircleciに設定する方法](https://hitolog.blog/2021/10/14/serverspec/)
 - しかしcircleciでの実行では"~/.ssh/config"での秘密鍵のパスを指定できないが、ansible実行時に事前に秘密鍵を登録しているので問題無し
 - "~/.ssh/config"で設定できていない"User"と“HostName”は個々で設定する必要がある
@@ -306,5 +303,5 @@ options[:user] ||= "ec2-user"
 - ここから“HostName”はspecディレクトリ配下のディレクトリ名をテスト対象サーバーのIPアドレスに書き換えることで解決する。
 
 
-- ここまでで全ての準備は完了。実行結果は下記
+- ここまでで全ての準備は完了。実行結果は下記  
 [実行結果](./lecture13.md)
