@@ -145,8 +145,8 @@ end
 - 構成図の自動化は下記図の流れで実行される
 ![circleci1](image/13_circleci1.png)
 - 注目してほしいのは下図であり、circleciがcfn,Ansible,serverspecに指示を出し、それぞれを動かしている。
-- つまりcircleciが仮想のサーバーとして指示を出すため、通常AWS使用の際に必要なパスワード,SSH接続時に必要なIPアドレスと秘密鍵をcircleciに持たせることが必要(詳しくは手順の中で説明)
-- ローカルからプッシュしたファイルの情報以外はcircleciが持っていないことを意識すること。
+- つまりcircleciが仮想のサーバーとして指示を出すため、通常AWS使用の際に必要なパスワード,SSH接続時に必要なIPアドレスと秘密鍵等をcircleciに持たせることが必要(詳しくは手順の中で説明)
+- ローカルからリポジトリへプッシュしたファイルの情報以外はcircleciが持っていないことを意識すること。
 ![circleci2](image/13_circleci2.png)
 - またcircleciが仮想のサーバーとなりansibleを起動させEC2へ指示を出すことから、下記の関係性にも意識すること
 ![ansible2](image/13_ansible2.png)
@@ -155,8 +155,8 @@ end
 <br>
 
 ## 2-2.cfn-ansible-serverspec間で意識すること
-- 図①～③の順で実行され、主にansible(EC2の環境設定)はcfnで構築されたRDSやALBの情報を基に設定ファイルを書き換えていく必要がある。
-- つまりCloudFormationで構築されたリソースで必要な情報であるRDSのエンドポイントやALBのDNS名はansibleに受け渡す(詳細は手順の中で説明)
+- 図①～③の順で実行され、主にansible(EC2の環境設定)ではcfnで構築されたRDSやALBの情報を基にサンプルアプリの設定ファイルを書き換える。
+- つまりCloudFormationで構築されたリソースで必要な情報であるRDSのエンドポイントやALBのDNS名はansibleに受け渡す必要がある(詳細は手順の中で説明)
 ![circleci2](image/13_circleci2.png)
 
 
@@ -166,7 +166,7 @@ end
 <br>
 
 # 3.CircleCiとcfn
-### cfnで実行するjobは下記2つ。cfnテンプレートのコードチェックとデプロイである(configファイルより一部抜粋)
+### cfnで実行するjobはcfnテンプレートのコードチェックとデプロイ(circleci/configより抜粋)
 ```
   cfn-lint:
     executor: python/default
@@ -229,11 +229,12 @@ aws ssm get-parameters --query Parameters[].Value --output text --name RaiseTech
 
 
 <br>
-
-
+<br>
+<br>
+<br>
 
 # 4.CircleCiとansible
-### ansibleで実行するjobは下記。cfnでのエクスポート値の取込み、circleciサーバへansibleインストール、playbookの実行である(configファイルより抜粋)
+### ansibleで実行するjobはcfnでのエクスポート値の取込み、circleciサーバへansibleインストール、playbookの実行である(circleci/configより抜粋)
 ```
 -   ansible-execute:
     executor: ansible/default
