@@ -111,8 +111,8 @@ describe リソースタイプ(テスト対象) do
 end
 ```
 - リソースタイプはテストする対象のリソースを指定、マッチャーはリソースへ期待する状態を指定する。以下一例
-- 全てのリソースタイプは公式にて
-[リソースタイプ](https://serverspec.org/resource_types.html)
+- 全てのリソースタイプは下記公式にて
+[公式(リソースタイプ)](https://serverspec.org/resource_types.html)
 
 
 | リソースタイプ | 説明                                         |
@@ -153,14 +153,15 @@ end
 - またcircleciが仮想のサーバーとなりansibleを起動させEC2へ指示を出すことから、下記の関係性にも意識すること
 ![ansible2](image/13_ansible2.png)
 
+<br>
+<br>
 
 ## 2-2.cfn-ansible-serverspec間で意識すること
 - 図①～③の順で実行され、主にansible(EC2の環境設定)はcfnで構築されたRDSやALBの情報を基に設定ファイルを書き換えていく必要がある。
 - つまりCloudFormationで構築されたリソースで必要な情報であるRDSのエンドポイントやALBのDNS名はansibleに受け渡す(詳細は手順の中で説明)
 ![circleci2](image/13_circleci2.png)
 
-<br>
-<br>
+
 <br>
 <br>
 <br>
