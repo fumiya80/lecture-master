@@ -9,7 +9,7 @@
 - CD(継続的デリバリー)とは各環境へのデプロイ作業を自動化し、これを継続的に実行すること。
 - CircleCiはソースコードのバージョン管理ができるgithubと連携できる
 - これらからソースコードのバージョン管理/テスト/各サーバーへのデプロイを自動で行えることで、開発に集中できる
-  
+
 
 ### 1-1-2.使用方法
 - CircleCiで行うことは.circleci/config.ymlに記載し、このファイル内容をCircleCiが実行する。
@@ -43,22 +43,16 @@ jobs:
 <br>
 
 
-<br>
-
-
 ## 1-2.CloudFormation(以降cfn)
 ### 1-2-1.概要
 - cfnはインフラを自動化するために必要なIaC(Infrastructure as code)を行えるAWSのサービス。
 - IaC(Infrastructure as code)とはインフラをコード化すること。
-- インフラ自動化のメリットは。手動構築と比べて工数がかからない/再現性が高い/バージョン管理が容易であることが挙げられる
-- リソース構築内容を定義するファイルをテンプレートと呼び、それぞれのリソースの依存関係もテンプレートに記述される。
-- テンプレートを利用しCloudFormationによりプロビジョニングされたリソースの集合体をスタックと呼ぶ。
+- インフラ自動化のメリットは、手動構築と比較し工数が少ない/再現性が高い/バージョン管理が容易なことが挙げられる
+- リソース構築内容を定義するファイルをテンプレートと呼び、複数のリソースの依存関係もテンプレートに記述される。
+- テンプレートを利用しcfnによりプロビジョニングされたリソースの集合体をスタックと呼ぶ。
 
 ### 1-2-2.今回のCloudFormation用途
 - VPC,EC2,RDS,ALB,S3を自動で作成し、AWS環境を構築する。
-
-
-<br>
 
 
 <br>
@@ -105,6 +99,7 @@ jobs:
 ### 1-3-5.今回の具体的ansible用途
 - cfnで作成したEC2にアプリをデプロイできるよう設定/構成ファイルをコードで定義し、管理対象ノードを変更する。
 
+<br>
 
 ## 1-4.serverspec
 ### 1-4-1.serverspec概要
@@ -116,6 +111,9 @@ describe リソースタイプ(テスト対象) do
 end
 ```
 - リソースタイプはテストする対象のリソースを指定、マッチャーはリソースへ期待する状態を指定する。以下一例
+- 全てのリソースタイプは公式にて
+[リソースタイプ](https://serverspec.org/resource_types.html)
+
 
 | リソースタイプ | 説明                                         |
 |:--|:--|
@@ -134,21 +132,8 @@ end
 | `be_listening`  | ポートがリスニング状態であることを確認            |
 | `be_owned_by`   | ファイルが特定のユーザーに所有されていることを確認  |
 
-- 存在するリソースタイプは公式にて
-[リソースタイプ](https://serverspec.org/resource_types.html)
-
 ### 1-4-2.今回のserverspec用途
 - cfnで作成したEC2にアプリをデプロイできるよう設定/構成ファイルをコードで定義し、管理対象ノードを変更する。
-
-
-<br>
-
-
-<br>
-
-
-<br>
-
 
 <br>
 
@@ -168,14 +153,16 @@ end
 
 
 ## 2-2.cfn-ansible-serverspec間で意識すること
-- 下記の図でもう一つ意識することがある。
 - 図①～③の順で実行され、主にansible(EC2の環境設定)はcfnで構築されたRDSやALBの情報を基に設定ファイルを書き換えていく必要がある。
 - つまりCloudFormationで構築されたリソースで必要な情報であるRDSのエンドポイントやALBのDNS名はansibleに受け渡す(詳細は手順の中で説明)
 ![circleci2](image/13_circleci2.png)
 
+<br>
+
+
 
 # 3.CircleCiとcfn
-- cfnで実行するjobは下記2つで、cfnテンプレートのコードチェックとデプロイである(configファイルより一部抜粋)
+### cfnで実行するjobは下記2つ。cfnテンプレートのコードチェックとデプロイである(configファイルより一部抜粋)
 ```
   cfn-lint:
     executor: python/default
@@ -207,16 +194,17 @@ end
           root: /tmp
           paths: AWS*
 ```
+### configファイルの説明
 - 今回はaws cliというawsをコマンドラインで操作するためのツールをcircleci上で使用する。
 - aws cliを使用するにはアクセスキーとシークレットアクセスキーが必要であり、事前に環境変数としてCircleCiに設定している(上記configではリージョンも事前に設定)
+[アクセスキーの作成方法](https://acorn-blog.tech/aws-access-key/)  
+[CircleCiに環境変数を設定する方法](https://qiita.com/ashketcham/items/ea211040c841cbf81200)  
 - 下記部分の"："以降の文字列が環境変数である
 ```
 aws_access_key_id: AWS_ACCESS_KEY_ID
 aws_secret_access_key: AWS_SECRET_ACCESS_KEY
 region: AWS_DEFAULT_REGION
 ```
-[アクセスキーの作成方法](https://acorn-blog.tech/aws-access-key/)
-[CircleCiに環境変数を設定する方法](https://qiita.com/ashketcham/items/ea211040c841cbf81200)
 
 - 下記はスタック作成のコードであり、"--stack-name"以降にスタック名、"--template-file"以降にファイルの格納の場所を指定する
 ```
@@ -236,8 +224,12 @@ aws ssm get-parameters --query Parameters[].Value --output text --name RaiseTech
 ```
 
 
+<br>
+
+
+
 # 4.CircleCiとansible
-- ansibleで実行するjobは下記であり、cfnでのエクスポート値の取込み、circleciサーバへansibleインストール、playbookの実行である(configファイルより抜粋)
+### ansibleで実行するjobは下記。cfnでのエクスポート値の取込み、circleciサーバへansibleインストール、playbookの実行である(configファイルより抜粋)
 ```
 -   ansible-execute:
     executor: ansible/default
@@ -256,6 +248,7 @@ aws ssm get-parameters --query Parameters[].Value --output text --name RaiseTech
           playbook: ansible/playbook.yml
           playbook-options: '-i ansible/inventory'
 ```
+### playbookファイルの説明
 - playbookの内容が多いので、下記の様にrolesとして分け実行させる。また先程取込んだcfnのエクスポート値をrolesで使用するため定義する。(playbbokより一部抜粋)
 - その他で使用したい変数もplaybookで指定する。
 ```
@@ -272,6 +265,8 @@ aws ssm get-parameters --query Parameters[].Value --output text --name RaiseTech
     ～～～～～～～～～～
     aws_s3_bucket: "{{ (lookup('env','AWS_S3_BUCKET')) }}"　#環境変数として事前に設定済
 ```
+
+### inventoryファイルの説明
 - iventoryではサーバの指定とその他オプションを決める
 ```
 [server]
@@ -281,15 +276,19 @@ ansible_user=ec2-user　　#SSH接続する際のユーザー名
 ansible_become_user=root　　#Ansibleがsudoのコマンドを使用する際のユーザー名
 ```
 
+### その他設定すること
 - 事前にEC2へのSSH接続のため秘密鍵をcircleci上に登録しておく  
 [秘密鍵をcircleciに設定する方法](https://qiita.com/takuyama/items/4dfebb15bd9408dd92ee)
 - これでCircleCiからansibleを起動できる段階となったが、ローカルから管理対象ノードへ指示を出せるかを確認することをオススメする
 - いきなりcircleciでansibleを実行すると、ansible側の問題かcircleci側の問題であるか分からなくなるため  
 [ローカルからansible実行](https://qiita.com/tx2/items/ff8d27ff479754bbc4cc)
 
+<br>
+
+
 
 # 5.CircleCiとserverspec
-- serverspecで実行するjobは下記であり、serverspecのテストに必要な依存関係をインストールし、テストの実行である(configファイルより抜粋)
+### serverspecで実行するjobは下記。serverspecのテストに必要な依存関係のインストール、テストの実行である(configファイルより抜粋)
 ```
   serverspec-execute:
     executor: ruby/default
