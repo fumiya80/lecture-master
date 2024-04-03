@@ -144,12 +144,12 @@ end
 ## 2-1.circleciで意識すること
 - 構成図の自動化は下記図の流れで実行される
 ![circleci1](image/13_circleci1.png)
-- 注目してほしいのは下図であり、circleciがcfn,Ansible,serverspecに指示を出し、それぞれを動かしている。
+- 注目は下図であり、circleciがcfn,Ansible,serverspecに指示を出し、それぞれを動かしている。
 - つまりcircleciが仮想のサーバーとして指示を出すため、通常AWS使用の際に必要なパスワード,SSH接続時に必要なIPアドレスと秘密鍵等をcircleciに持たせることが必要(詳しくは手順の中で説明)
 - ローカルからリポジトリへプッシュしたファイルの情報以外はcircleciが持っていないことを意識すること。
 ![circleci2](image/13_circleci2.png)
 - またcircleciが仮想のサーバーとなりansibleを起動させEC2へ指示を出すことから、下記の関係性にも意識すること
-![circleci3](image/13_ansible2.png)
+![circleci3](image/13_circleci3.png)
 
 <br>
 <br>
