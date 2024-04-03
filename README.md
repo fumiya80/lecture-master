@@ -3,7 +3,10 @@
 ## 最終課題の構成図
 ![figure](image/figure.png)
 
-- [採取課題の手順はこちらから](./lecture13_steps.md)
+- 構成図再現手順はこちらから](./lecture13_steps.md)
+
+<br>
+<br>
 
 以下補足
 - CircleCIを用い構成図内①∼③を走らせ、AWS環境の構築/EC2の環境設定/EC2のテストを自動で行いました。
