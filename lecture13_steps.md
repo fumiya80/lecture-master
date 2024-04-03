@@ -202,7 +202,7 @@ end
 
 ## 3-2.aws cliについて
 - 今回はaws cliというawsをコマンドラインで操作するためのツールをcircleci上で使用する。
-- aws cliを使用するにはアクセスキーとシークレットアクセスキーが必要であり、事前に環境変数としてCircleCiに設定している(上記configではリージョンも事前に設定)
+- aws cliを使用するにはアクセスキーとシークレットアクセスキーが必要であり、事前に環境変数としてCircleCiに設定している(上記configではリージョンも事前に設定)  
 [アクセスキーの作成方法](https://acorn-blog.tech/aws-access-key/)  
 [CircleCiに環境変数を設定する方法](https://qiita.com/ashketcham/items/ea211040c841cbf81200)  
 - 下記部分の"："以降の文字列が環境変数である
@@ -296,8 +296,9 @@ ansible_become_user=root　　#Ansibleがsudoのコマンドを使用する際�
 [ローカルからansible実行](https://qiita.com/tx2/items/ff8d27ff479754bbc4cc)
 
 <br>
-
-
+<br>
+<br>
+<br>
 
 # 5.CircleCiとserverspec
 ## 5-1.configの内容
@@ -337,6 +338,10 @@ options[:user] ||= "ec2-user"
 - 上記リンク先に「Serverspecはテストを実行する時specディレクトリ配下のディレクトリをテスト対象サーバとします」とある。
 - ここから“HostName”はspecディレクトリ配下のディレクトリ名をテスト対象サーバーのIPアドレスに書き換えることで解決する。
 
+<br>
+<br>
+<br>
+<br>
 
 # 実行結果
 - ここまでで全ての準備は完了。実行結果は下記  
