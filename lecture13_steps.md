@@ -213,7 +213,8 @@ region: AWS_DEFAULT_REGION
 ```
 
 ## 3-3.スタックについて
-- 下記はスタック作成のコードであり、"--stack-name"以降にスタック名、"--template-file"以降にファイルの格納の場所を指定する
+- 下記はスタック作成のコードであり、"--stack-name"以降にスタック名、"--template-file"以降にテンプレートの格納の場所を指定する
+- [テンプレートはこちら](./cloudformation)
 ```
 aws cloudformation deploy --stack-name lecture13-vpc --template-file cloudformation/vpc.yml
 ```
@@ -261,6 +262,7 @@ aws ssm get-parameters --query Parameters[].Value --output text --name RaiseTech
 ## 4-2.playbookファイルの説明
 - playbookの内容が多いので、下記の様にrolesとして分け実行させる。また先程取込んだcfnのエクスポート値をrolesで使用するため定義する。(playbbokより一部抜粋)
 - その他で使用したい変数もplaybookで指定する。
+- [実行内容はこちら](./ansible)
 ```
 - hosts: server
   roles:
@@ -337,6 +339,7 @@ options[:user] ||= "ec2-user"
 ```
 - 上記リンク先に「Serverspecはテストを実行する時specディレクトリ配下のディレクトリをテスト対象サーバとします」とある。
 - ここから“HostName”はspecディレクトリ配下のディレクトリ名をテスト対象サーバーのIPアドレスに書き換えることで解決する。
+- [必要設定ファイルはこちらから](./serverspec/spec/3.112.229.42/sample_spec.rb)
 
 <br>
 <br>
