@@ -11,7 +11,7 @@
 - これらからソースコードのバージョン管理/テスト/各サーバーへのデプロイを自動で行えることで、開発に集中できる
 
 
-### 1-1-2.使用方法
+### 1-1-2.configについて
 - CircleCiで行うことは.circleci/config.ymlに記載し、このファイル内容をCircleCiが実行する。
 - 下記はcircleci/config.ymlの抜粋
 - "version"とはCircleCIのバージョンのことである
@@ -95,14 +95,14 @@ jobs:
     　　state: started
 ```
 
-### 1-3-5.今回の用途
+### 1-3-4.今回の用途
 - cfnで作成したEC2を管理対象ノードとし、自動でアプリをデプロイできるよう設定する。
 
 <br>
 <br>
 
 ## 1-4.serverspec
-### 1-4-1.serverspec概要
+### 1-4-1.概要
 - serverspecはテスト自動化ツールの1種である。
 - テストコードはリソースタイプとマッチャーので記述される。
 ```
@@ -149,7 +149,7 @@ end
 - ローカルからリポジトリへプッシュしたファイルの情報以外はcircleciが持っていないことを意識すること。
 ![circleci2](image/13_circleci2.png)
 - またcircleciが仮想のサーバーとなりansibleを起動させEC2へ指示を出すことから、下記の関係性にも意識すること
-![ansible2](image/13_ansible2.png)
+![circleci3](image/13_ansible2.png)
 
 <br>
 <br>
@@ -166,7 +166,8 @@ end
 <br>
 
 # 3.CircleCiとcfn
-### cfnで実行するjobはcfnテンプレートのコードチェックとデプロイ(circleci/configより抜粋)
+## 3-1.configの内容(以降configとはcircleci/configとする)
+- cfnで実行するjobはcfnテンプレートのコードチェックとデプロイ(circleci/configより抜粋)
 ```
   cfn-lint:
     executor: python/default
@@ -198,7 +199,8 @@ end
           root: /tmp
           paths: AWS*
 ```
-### configファイルの説明
+
+## 3-2.aws cliについて
 - 今回はaws cliというawsをコマンドラインで操作するためのツールをcircleci上で使用する。
 - aws cliを使用するにはアクセスキーとシークレットアクセスキーが必要であり、事前に環境変数としてCircleCiに設定している(上記configではリージョンも事前に設定)
 [アクセスキーの作成方法](https://acorn-blog.tech/aws-access-key/)  
@@ -210,6 +212,7 @@ aws_secret_access_key: AWS_SECRET_ACCESS_KEY
 region: AWS_DEFAULT_REGION
 ```
 
+## 3-3.スタックについて
 - 下記はスタック作成のコードであり、"--stack-name"以降にスタック名、"--template-file"以降にファイルの格納の場所を指定する
 ```
 aws cloudformation deploy --stack-name lecture13-vpc --template-file cloudformation/vpc.yml
@@ -234,7 +237,8 @@ aws ssm get-parameters --query Parameters[].Value --output text --name RaiseTech
 <br>
 
 # 4.CircleCiとansible
-### ansibleで実行するjobはcfnでのエクスポート値の取込み、circleciサーバへansibleインストール、playbookの実行である(circleci/configより抜粋)
+## 4-1.configの内容
+- ansibleで実行するjobはcfnでのエクスポート値の取込み、circleciサーバへansibleインストール、playbookの実行である(circleci/configより抜粋)
 ```
 -   ansible-execute:
     executor: ansible/default
@@ -253,7 +257,8 @@ aws ssm get-parameters --query Parameters[].Value --output text --name RaiseTech
           playbook: ansible/playbook.yml
           playbook-options: '-i ansible/inventory'
 ```
-### playbookファイルの説明
+
+## 4-2.playbookファイルの説明
 - playbookの内容が多いので、下記の様にrolesとして分け実行させる。また先程取込んだcfnのエクスポート値をrolesで使用するため定義する。(playbbokより一部抜粋)
 - その他で使用したい変数もplaybookで指定する。
 ```
@@ -271,7 +276,7 @@ aws ssm get-parameters --query Parameters[].Value --output text --name RaiseTech
     aws_s3_bucket: "{{ (lookup('env','AWS_S3_BUCKET')) }}"　#環境変数として事前に設定済
 ```
 
-### inventoryファイルの説明
+## 4-3.inventoryファイルの説明
 - iventoryではサーバの指定とその他オプションを決める
 ```
 [server]
@@ -281,10 +286,12 @@ ansible_user=ec2-user　　#SSH接続する際のユーザー名
 ansible_become_user=root　　#Ansibleがsudoのコマンドを使用する際のユーザー名
 ```
 
-### その他設定すること
-- 事前にEC2へのSSH接続のため秘密鍵をcircleci上に登録しておく  
+## 4-4.秘密鍵の設定
+- 事前にEC2へのSSH接続のため秘密鍵をcircleci上に設定しておく  
 [秘密鍵をcircleciに設定する方法](https://qiita.com/takuyama/items/4dfebb15bd9408dd92ee)
-- これでCircleCiからansibleを起動できる段階となったが、ローカルから管理対象ノードへ指示を出せるかを確認することをオススメする
+
+## 4-5.ローカルでの実行
+- ここまででCircleCiからansibleを起動できる段階となったが、ローカルから管理対象ノードへ指示を出せるかを確認することをオススメする
 - いきなりcircleciでansibleを実行すると、ansible側の問題かcircleci側の問題であるか分からなくなるため  
 [ローカルからansible実行](https://qiita.com/tx2/items/ff8d27ff479754bbc4cc)
 
@@ -293,7 +300,8 @@ ansible_become_user=root　　#Ansibleがsudoのコマンドを使用する際�
 
 
 # 5.CircleCiとserverspec
-### serverspecで実行するjobは下記。serverspecのテストに必要な依存関係のインストール、テストの実行である(configファイルより抜粋)
+## 5-1.configの内容
+- serverspecで実行するjobは下記。serverspecのテストに必要な依存関係のインストール、テストの実行である(configファイルより抜粋)
 ```
   serverspec-execute:
     executor: ruby/default
@@ -309,8 +317,10 @@ ansible_become_user=root　　#Ansibleがsudoのコマンドを使用する際�
             cd serverspec
             bundle exec rake spec
 ```
+
+## 5-2.serverspec設定ファイル
 - 事前にserverspecの設定ファイルを入手し保存しておく  
-[秘密鍵をcircleciに設定する方法](https://hitolog.blog/2021/10/14/serverspec/)
+[serverspecでの設定ファイル入手方法](https://hitolog.blog/2021/10/14/serverspec/)
 - しかしcircleciでの実行では"~/.ssh/config"での秘密鍵のパスを指定できないが、ansible実行時に事前に秘密鍵を登録しているので問題無し
 - "~/.ssh/config"で設定できていない"User"と“HostName”は個々で設定する必要がある
 - "User"はspec_helper.rb内の"user"の値を下記の様に書き換える
@@ -326,5 +336,9 @@ options[:user] ||= "ec2-user"
 ```
 - 上記リンク先に「Serverspecはテストを実行する時specディレクトリ配下のディレクトリをテスト対象サーバとします」とある。
 - ここから“HostName”はspecディレクトリ配下のディレクトリ名をテスト対象サーバーのIPアドレスに書き換えることで解決する。
+
+
+# 実行結果
 - ここまでで全ての準備は完了。実行結果は下記  
 [実行結果](./lecture13.md)
+
