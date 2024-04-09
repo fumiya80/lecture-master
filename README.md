@@ -24,7 +24,8 @@
 [公式のスタートガイドから抜粋](https://circleci.com/docs/ja/getting-started/)
 
 <details><summary>circleci概要</summary>
-以下は参考。[次の手順は2.CircleCiから](#2CircleCiとCFn)
+
+## 以下は参考。[次の手順は2.CircleCiから](#2CircleCiとCFn)  
 ## 概要
 - CircleCiはCI/CDツールの1種である。  
 - CI(継続的インティグレーション)とはアプリやインフラのソースコードのテストを自動化し、これを継続的に実行すること。
@@ -64,6 +65,7 @@ jobs:
 ```
 </div>
 </details>
+
 
 ## 1-1-3.今回の用途
 - AWS環境を自動構築(CloudFormation)、アプリデプロイのためEC2を自動環境設定(ansible)、EC2の環境設定を自動テスト(serverspec)、これらのソースコードをgithubへプッシュのみし一連で行うことを可能にする
