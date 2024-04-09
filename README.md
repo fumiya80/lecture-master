@@ -47,6 +47,7 @@
 - "executor"とは"job"の実行環境を指定するものであり、上記では"orbs"で"python"と命名した設定を呼び出している
 
 <div>
+
 ```
 version: 2.1
 
@@ -64,8 +65,8 @@ jobs:
           command: |
             cfn-lint -i W3002 -t cloudformation/*.yml
 ```
-</div>
 
+</div>
 </details>
 
 
