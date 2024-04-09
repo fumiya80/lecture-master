@@ -37,6 +37,7 @@
 
 
 <details><summary>configファイルとは</summary>
+
 ## configファイルについて
 - CircleCiで行うことは.circleci/config.ymlに記載し、このファイル内容をCircleCiが実行する。
 - 下記はcircleci/config.ymlの抜粋
@@ -64,6 +65,7 @@ jobs:
             cfn-lint -i W3002 -t cloudformation/*.yml
 ```
 </div>
+
 </details>
 
 
