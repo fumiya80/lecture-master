@@ -15,39 +15,39 @@
 
 <details><summary>再現に必要なファイルとフォルダ構成</summary>
 
- ├─.circleci
- |　 └─config.yml
- |
- ├─ansible
- |  └─roles
- |     ├─01_yum
- |     |  ├─tasks
- |     |  |  └─main.yml
- |     |  ├─vars
- |     |  |  └─main.yml(変数を使用しない場合はvarsのフォルダごと削除)
- |     |  └─templates
- |     |     └─XXX.XXX(テンプレートを使用しない場合はtemplatesフォルダごと削除)
- |     |
- |  ～～～～
- |     ├─iventory
- |     └─playbook.yml
- |
- |
- ├─cloudformation
- |  ├─vpc.yml(自分が構成したいAWS環境のテンプレートを配置)
- | ～～～～
- |
- ├─serverspec
- |  ├─spec
- |  |  ├─3.112.229.42(自身のEC2のIPアドレスを記載)
- |  |  |  └─sample_spec.rb
- |  |  └─spec_helper.rb
- |  ├─.rspec
- |  ├─Gemfile
- |  ├─Gemfile.lock
- |  └─Rakefile
- |
- └─ansible.cfg
+ ├─.circleci  
+ |　 └─config.yml  
+ |  
+ ├─ansible  
+ |  └─roles  
+ |     ├─01_yum  
+ |     |  ├─tasks  
+ |     |  |  └─main.yml  
+ |     |  ├─vars  
+ |     |  |  └─main.yml(変数を使用しない場合はvarsのフォルダごと削除)  
+ |     |  └─templates  
+ |     |     └─XXX.XXX(テンプレートを使用しない場合はtemplatesフォルダごと削除)  
+ |     |  
+ |  ～～～～  
+ |     ├─iventory  
+ |     └─playbook.yml  
+ |  
+ |  
+ ├─cloudformation  
+ |  ├─vpc.yml(自分が構成したいAWS環境のテンプレートを配置)  
+ | ～～～～  
+ |  
+ ├─serverspec  
+ |  ├─spec  
+ |  |  ├─3.112.229.42(自身のEC2のIPアドレスを記載)  
+ |  |  |  └─sample_spec.rb  
+ |  |  └─spec_helper.rb  
+ |  ├─.rspec  
+ |  ├─Gemfile  
+ |  ├─Gemfile.lock  
+ |  └─Rakefile  
+ |  
+ └─ansible.cfg  
 
 </details>
 
@@ -60,9 +60,8 @@
 - ⑥Successと書かれたコメントが表示されたら、circleci動作確認完了  
 [公式のスタートガイドから抜粋](https://circleci.com/docs/ja/getting-started/)
 
-<details><summary>circleci概要</summary>
+<details><summary>### circleci概要</summary>
 
-## 概要
 - CircleCiはCI/CDツールの1種である。  
 - CI(継続的インティグレーション)とはアプリやインフラのソースコードのテストを自動化し、これを継続的に実行すること。
 - CD(継続的デリバリー)とは各環境へのデプロイ作業を自動化し、これを継続的に実行すること。
@@ -116,7 +115,7 @@ jobs:
 
 
 <details><summary>circleciと他サービス連携で注意すること</summary>
-### circleciと他サービス連携で注意すること
+
 - 構成図の自動化は下記図の流れで実行される
 ![circleci1](image/13_circleci1.png)
 - 注目は下図であり、circleciがcfn,Ansible,serverspecに指示を出し、それぞれを動かしている。
