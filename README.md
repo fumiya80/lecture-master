@@ -16,16 +16,16 @@
 <details><summary>再現に必要なファイルとフォルダ構成</summary>
 
  ├─.circleci  
- |　 └─config.yml  
- |  
+ │　 └─config.yml  
+ │ 
  ├─ansible  
- |  └─roles  
- |     ├─01_yum  
- |     |  ├─tasks  
- |     |  |  └─main.yml  
- |     |  ├─vars  
- |     |  |  └─main.yml(変数を使用しない場合はvarsのフォルダごと削除)  
- |     |  └─templates  
+ │  └─roles  
+ │     ├─01_yum  
+ │     |  ├─tasks  
+ │     |  |  └─main.yml  
+ │     |  ├─vars  
+ │     |  |  └─main.yml(変数を使用しない場合はvarsのフォルダごと削除)  
+ │     |  └─templates  
  |     |     └─XXX.XXX(テンプレートを使用しない場合はtemplatesフォルダごと削除)  
  |     |  
  |  ～～～～  
@@ -60,7 +60,7 @@
 - ⑥Successと書かれたコメントが表示されたら、circleci動作確認完了  
 [公式のスタートガイドから抜粋](https://circleci.com/docs/ja/getting-started/)
 
-<details><summary>### circleci概要</summary>
+<details><summary>*circleci概要*</summary>
 
 - CircleCiはCI/CDツールの1種である。  
 - CI(継続的インティグレーション)とはアプリやインフラのソースコードのテストを自動化し、これを継続的に実行すること。
