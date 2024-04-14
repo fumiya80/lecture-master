@@ -28,7 +28,7 @@
 - ⑥Successと書かれたコメントが表示されたら、circleci動作確認完了  
 [公式のスタートガイドから抜粋](https://circleci.com/docs/ja/getting-started/)
 
-<details><summary>*circleci概要*</summary>
+<details><summary>circleci概要</summary>
 
 - CircleCiはCI/CDツールの1種である。  
 - CI(継続的インティグレーション)とはアプリやインフラのソースコードのテストを自動化し、これを継続的に実行すること。
@@ -42,7 +42,6 @@
 
 <details><summary>configファイルとは</summary>
 
-### configファイルについて
 - CircleCiで行うことは.circleci/config.ymlに記載し、このファイル内容をCircleCiが実行する。
 - 下記はcircleci/config.ymlの抜粋
 - "version"とはCircleCIのバージョンのことである
@@ -75,7 +74,6 @@ jobs:
 
 <details><summary>今回の用途</summary>
 
-### 今回の用途
 - AWS環境を自動構築(CloudFormation)、アプリデプロイのためEC2を自動環境設定(ansible)、EC2の環境設定を自動テスト(serverspec)、これらのソースコードをgithubへプッシュのみし一連で行うことを可能にする
 - これで開発作業に集中できる環境を作る
 
@@ -142,7 +140,7 @@ cfn-lint -i W3002 -t 「cloudformation/*.yml」
 ```
 
 <details><summary>概要</summary>
-### 概要
+
 - cfnはインフラを自動化するために必要なIaC(Infrastructure as code)を行えるAWSのサービス。
 - IaC(Infrastructure as code)とはインフラをコード化すること。
 - インフラ自動化のメリットは、手動構築と比較し工数が少ない/再現性が高い/バージョン管理が容易なことが挙げられる
@@ -153,13 +151,14 @@ cfn-lint -i W3002 -t 「cloudformation/*.yml」
 
 
 <details><summary>今回の用途</summary>
-### 今回の用途
+
 - VPC,EC2,RDS,ALB,S3でのAWS環境を自動構築する。
 
 </details>
 
 
 <details><summary>実行内容</summary>
+
 - cfnで実行するjobはcfnテンプレートのコードチェックとデプロイ(circleci/configより抜粋)
 
 <dev>
@@ -200,7 +199,7 @@ cfn-lint -i W3002 -t 「cloudformation/*.yml」
 
 
 <details><summary>aws-cliについて</summary>
-### aws cliについて
+
 - 今回はaws cliというawsをコマンドラインで操作するためのツールをcircleci上で使用する。
 - aws cliを使用するにはアクセスキーとシークレットアクセスキーが必要であり、事前に環境変数としてCircleCiに設定している(上記configではリージョンも事前に設定)  
 - 下記部分の"："以降の文字列がconfig内の環境変数である
@@ -266,7 +265,7 @@ ssh_args = -C -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecki
 ```
 
 <details><summary>ansible概要</summary>
-### 概要
+
 - ansibleは構成管理ツールの1種である。
 - 構成管理ツールとは管理対象サーバーの設定/構成ファイルをコードで定義し、定義内容と異なる場合は予め定義した設定/構成に変更するものである。(例えばrailsはversion 7.0.4と定義すると、異なるversionの場合は7.0.4に自動で変更する)
 - これにより手動のコマンド操作でサーバを設定/構成することが不要、自動で何度行っても同じ設定/構成となる。
@@ -276,7 +275,6 @@ ssh_args = -C -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecki
 
 <details><summary>ノードと必要ファイル</summary>
 
-### ノードと必要ファイル
 - コントロールノード(Control node)…………設定/構成ファイルを基に指示を出すサーバー
 - 管理対象ノード(Managed node)…………コントロールノードから指示を受け、設定/構成ファイルを基に管理されるサーバー
 - イベントリ(iventory)…………管理対象ノードを指定するファイル、IPアドレスを記載する。
@@ -287,7 +285,6 @@ ssh_args = -C -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecki
 
 <details><summary>playbook記載例</summary>
 
-### playbook記載例
 - モジュール(module)…………playbookを構成する最小単位のこと。例として管理ノード上で指定したシェルコマンドを実行するshellmodule、管理ノード上のサービスを制御するsystemdmodule等がある
 - タスク(task)…………moduleのパラメーターに値を設定し実行可能となったもの。taskには固有のtask名を設定する
 - プレイ(play)…………1つ以上のタスクを並べ、管理対象ノードと変数等を加えたものをプレイと呼ぶ。  
@@ -316,10 +313,11 @@ ssh_args = -C -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecki
 ```
 
 </div>
+
 </details>
 
 <details><summary>inventory記載例</summary>
-### inventory記載例
+
 - 基本的には管理対象ノードを指定するファイルである
 - その他定義をすることもでき、今回はSSH接続時のユーザーとrootユーザー権限を使用する場合の定義を追加
 - その他詳細は下記  
@@ -337,6 +335,7 @@ ansible_become_user=root  #ルート権限を使う際の定義。playbook内「
 ```
 
 </div>
+
 </details>
 
 
