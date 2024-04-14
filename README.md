@@ -15,39 +15,7 @@
 
 <details><summary>再現に必要なファイルとフォルダ構成</summary>
 
- ├─.circleci  
- │　 └─config.yml  
- │ 
- ├─ansible  
- │  └─roles  
- │     ├─01_yum  
- │     |  ├─tasks  
- │     |  |  └─main.yml  
- │     |  ├─vars  
- │     |  |  └─main.yml(変数を使用しない場合はvarsのフォルダごと削除)  
- │     |  └─templates  
- |     |     └─XXX.XXX(テンプレートを使用しない場合はtemplatesフォルダごと削除)  
- |     |  
- |  ～～～～  
- |     ├─iventory  
- |     └─playbook.yml  
- |  
- |  
- ├─cloudformation  
- |  ├─vpc.yml(自分が構成したいAWS環境のテンプレートを配置)  
- | ～～～～  
- |  
- ├─serverspec  
- |  ├─spec  
- |  |  ├─3.112.229.42(自身のEC2のIPアドレスを記載)  
- |  |  |  └─sample_spec.rb  
- |  |  └─spec_helper.rb  
- |  ├─.rspec  
- |  ├─Gemfile  
- |  ├─Gemfile.lock  
- |  └─Rakefile  
- |  
- └─ansible.cfg  
+![directory](image/directory.png)
 
 </details>
 
