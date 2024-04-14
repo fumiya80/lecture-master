@@ -160,6 +160,7 @@ end
 ![circleci2](image/13_circleci2.png)
 
 
+
 <br>
 <br>
 <br>
@@ -258,6 +259,7 @@ aws ssm get-parameters --query Parameters[].Value --output text --name RaiseTech
           playbook: ansible/playbook.yml
           playbook-options: '-i ansible/inventory'
 ```
+
 
 ## 4-2.playbookファイルの説明
 - playbookの内容が多いので、下記の様にrolesとして分け実行させる。また先程取込んだcfnのエクスポート値をrolesで使用するため定義する。(playbbokより一部抜粋)
