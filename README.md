@@ -226,7 +226,7 @@ region: AWS_DEFAULT_REGION
 
 # 3.CircleCiとansible
 - circleciのconfigを下記①～②の手順で変更する
-- ①下記を先程設定したテキストファイル名を記載し変数として指定 *本configでのテキストファイル名から未変更の場合はスキップ
+- ①下記を先程設定したテキストファイル名を記載し変数として指定(本configでのテキストファイル名から未変更の場合はスキップ)
 ```
 #「」内をテキストファイル名に変更
 echo "export AWS_EC2_HOST=$(cat /tmp/「AWS_EC2_HOST」.txt)" >> $BASH_ENV
@@ -237,13 +237,13 @@ echo "export AWS_EC2_HOST=$(cat /tmp/「AWS_EC2_HOST」.txt)" >> $BASH_ENV
 playbook: 「ansible/playbook.yml」
 playbook-options: '-i 「ansible/inventory」'
 ```
-- playbookを下記①～②の手順で変更する[playbookはこちらから](./.circleci/config.yml)
+- playbookを下記①～③の手順で変更する[playbookはこちらから](./.circleci/config.yml)
 - ①rolesフォルダ内のフォルダ名を変更する場合はplaybook内下記箇所も変更すること
 ```
 #01_yumのフォルダ名を変更する場合は「」内も変更する事
 - { role: 「01_yum」, tags: yum }
 ```
-- ②先程変数として指定した値をplaybook内で使用できるよう設定  *本configから変数名未変更の場合はスキップ
+- ②先程変数として指定した値をplaybook内で使用できるよう設定(本configから変数名未変更の場合はスキップ)
 ```
 #「」内に先程設定した変数名を記載
 aws_alb_host : "{{ (lookup('env','「AWS_ALB_HOST」')) }}"
