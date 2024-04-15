@@ -486,11 +486,15 @@ options[:user] ||= "ec2-user"
 
 </details>
 
+<br>
+<br>
 
 # 実行結果
 - ここまでで全ての準備は完了。実行結果は下記  
 [実行結果](./lecture13.md)
 
+<br>
+<br>
 
 ## 学習記録はリンク先
 [学習記録](./study-record.md)
