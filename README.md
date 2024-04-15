@@ -467,6 +467,7 @@ end
 - "User"はspec_helper.rb内の"user"の値を下記の様に書き換える
 
 <dev>
+
 ```
 require 'serverspec'
 require 'net/ssh'
@@ -477,6 +478,7 @@ options[:user] ||= "ec2-user"
 
 ～～～～～～～～～～
 ```
+
 </dev>
 
 - 上記リンク先に「Serverspecはテストを実行する時specディレクトリ配下のディレクトリをテスト対象サーバとします」とある。
