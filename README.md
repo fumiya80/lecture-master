@@ -454,6 +454,7 @@ end
             bundle exec rake spec
 ```
 </dev>
+
 </details>
 
 
@@ -482,6 +483,7 @@ options[:user] ||= "ec2-user"
 - ここから“HostName”はspecディレクトリ配下のディレクトリ名をテスト対象サーバーのIPアドレスに書き換えることで解決する。  
 
 </details>
+
 
 # 実行結果
 - ここまでで全ての準備は完了。実行結果は下記  
