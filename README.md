@@ -95,7 +95,7 @@ jobs:
 
 
 <details><summary>cfn-ansible-serverspec間で意識すること</summary>
-### cfn-ansible-serverspec間で意識すること
+
 - 図①～③の順で実行され、主にansible(EC2の環境設定)ではcfnで構築されたRDSやALBの情報を基にサンプルアプリの設定ファイルを書き換える。
 - つまりCloudFormationで構築されたリソースで必要な情報であるRDSのエンドポイントやALBのDNS名はansibleに受け渡す必要がある(詳細は手順の中で説明)
 ![circleci2](image/13_circleci2.png)
@@ -110,9 +110,9 @@ jobs:
 <br>
 
 ## 2.CircleCiとCFn
-- ③aws cliを使用するためのアクセスキーとシークレットアクセスキーを取得する。  
+- aws cliを使用するためのアクセスキーとシークレットアクセスキーを取得する。  
 [アクセスキーの作成方法](https://acorn-blog.tech/aws-access-key/)  
-- ④取得したキーとリージョンをcircleciの環境変数として設定する。("aws_access_key_id" "aws_secret_access_key" "region"をNameとして、取得したキーの値をValueに設定する)  
+- 取得したキーとリージョンをcircleciの環境変数として設定する。("aws_access_key_id" "aws_secret_access_key" "region"をNameとして、取得したキーの値をValueに設定する)  
 [CircleCiに環境変数を設定する方法](https://qiita.com/ashketcham/items/ea211040c841cbf81200) 
 - circleciのconfigを下記①～④の手順で変更する[configファイルはこちらから](./.circleci/config.yml)
 - ①Cfnテンプレートの格納場所を指定
@@ -120,26 +120,26 @@ jobs:
 # 「」をテンプレートが保存される場所を指定　*本構成から変更しないことを推奨
 cfn-lint -i W3002 -t 「cloudformation/*.yml」
 ```
-- ⑤使用したいCFnテンプレートを格納し、スタック名とファイル名を書き換える。[今回使用したテンプレートはこちら](./cloudformation)
+- ②使用したいCFnテンプレートを格納し、スタック名とファイル名を書き換える。[今回使用したテンプレートはこちら](./cloudformation)
 ```
 #1つ目の「」をスタック名に変更
 #2つ目の「」を使用するテンプレートに変更
  aws cloudformation deploy --stack-name 「lecture13-vpc」 --template-file 「cloudformation/vpc.yml」
 ```
-- ⑥ansibleで“EC2のIPアドレス” “ALBのDNS名” “RDSのエンドポイント,ユーザー名,パスワード”が必要となるので、それぞれテキストファイルに記載しておく
+- ③ansibleで“EC2のIPアドレス” “ALBのDNS名” “RDSのエンドポイント,ユーザー名,パスワード”が必要となるので、それぞれテキストファイルに記載しておく(本configからテキストファイル名を変更しないことを推奨)
 ```
 #1つ目の「」を設定したスタック名に変更
 #2つ目の「」をスタック内で何番目のoutput値を指定するか選択。但し1つ目のエクスポート値を0として数える。
-#3つ目の「」にテキストファイル名を入れる。*本configでのテキストファイル名から変更しないことを推奨
+#3つ目の「」にテキストファイル名を入れる。
  aws cloudformation describe-stacks --stack-name 「lecture13-EC2」 --query 'Stacks[].Outputs[「1」].OutputValue' --output text > /tmp/「AWS_EC2_HOST」.txt
 ```
-- ⑦今回使用したDBのテンプレートはパラメータストアからRDSパスワードを設定しているので、下記にてパラメータストアから値を引っ張ってくる
+- ④今回使用したDBのテンプレートはパラメータストアからRDSパスワードを設定しているので、下記にてパラメータストアから値を引っ張ってくる
 ```
 #「」に引っ張ってきたいパラメータ名を入力する
  aws ssm get-parameters --query Parameters[].Value --output text --name 「RaiseTech-RDS-password1」 --with-decryption > /tmp/AWS_DB_PW.txt
 ```
 
-<details><summary>概要</summary>
+<details><summary>circleci概要</summary>
 
 - cfnはインフラを自動化するために必要なIaC(Infrastructure as code)を行えるAWSのサービス。
 - IaC(Infrastructure as code)とはインフラをコード化すること。
@@ -205,6 +205,7 @@ cfn-lint -i W3002 -t 「cloudformation/*.yml」
 - 下記部分の"："以降の文字列がconfig内の環境変数である
 
 <dev>
+
 ```
 aws_access_key_id: AWS_ACCESS_KEY_ID
 aws_secret_access_key: AWS_SECRET_ACCESS_KEY
@@ -212,6 +213,7 @@ region: AWS_DEFAULT_REGION
 ```
 
 </dev>
+
 </details>
 
 
@@ -341,13 +343,12 @@ ansible_become_user=root  #ルート権限を使う際の定義。playbook内「
 
 <details><summary>今回の用途</summary>
 
-### 今回の用途
 - cfnで作成したEC2を管理対象ノードとし、自動でアプリをデプロイできるよう設定する。
 
 </details>
 
 <details><summary>実行内容</summary>
-### 実行内容
+
 - ansibleで実行するjobはcfnでのエクスポート値の取込み、circleciサーバへansibleインストール、playbookの実行である(circleci/configより抜粋)
 ```
 -   ansible-execute:
@@ -371,7 +372,7 @@ ansible_become_user=root  #ルート権限を使う際の定義。playbook内「
 </details>
 
 <details><summary>ローカルでの実行</summary>
-### ローカルでの実行
+
 - CircleCiからansibleを起動できる段階となったが、ローカルから管理対象ノードへ指示を出せるかを確認することをオススメする
 - いきなりcircleciでansibleを実行すると、ansible側の問題かcircleci側の問題であるか分からなくなるため  
 [ローカルからansible実行](https://qiita.com/tx2/items/ff8d27ff479754bbc4cc)
@@ -388,8 +389,8 @@ ansible_become_user=root  #ルート権限を使う際の定義。playbook内「
 - sample_spec.rbの内容をテストしたい内容に書き換える
 - 3.112.229.42のフォルダ名をEC2のIPアドレスに変更する
 
-<details><summary>概要</summary>
-### 概要
+<details><summary>serverspec概要</summary>
+
 - serverspecはテスト自動化ツールの1種である。
 - テストコードはリソースタイプとマッチャーので記述される。
 ```
@@ -428,13 +429,12 @@ end
 
 <details><summary>今回の用途</summary>
 
-### 1-4-2.今回の用途
 - ansibleで設定したEC2が正しく環境設定できているか自動でテストする。
 
 </details>
 
 <details><summary>実行内容</summary>
-### 実行内容
+
 - serverspecで実行するjobは下記。serverspecのテストに必要な依存関係のインストール、テストの実行である(configファイルより抜粋)
 
 <dev>
@@ -458,7 +458,7 @@ end
 
 
 <details><summary>設定ファイルの入手方法と変更内容</summary>
-## 5-2.serverspec設定ファイル
+
 - 設定ファイルのネットからの入手方法は下記  
 [serverspecでの設定ファイル入手方法](https://hitolog.blog/2021/10/14/serverspec/)
 - しかしcircleciでの実行では"~/.ssh/config"での秘密鍵のパスを指定できないが、ansible実行時に事前に秘密鍵を登録しているので問題無し
@@ -477,8 +477,11 @@ options[:user] ||= "ec2-user"
 ～～～～～～～～～～
 ```
 </dev>
+
 - 上記リンク先に「Serverspecはテストを実行する時specディレクトリ配下のディレクトリをテスト対象サーバとします」とある。
 - ここから“HostName”はspecディレクトリ配下のディレクトリ名をテスト対象サーバーのIPアドレスに書き換えることで解決する。  
+
+</details>
 
 # 実行結果
 - ここまでで全ての準備は完了。実行結果は下記  
