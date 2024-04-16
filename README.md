@@ -139,7 +139,7 @@ cfn-lint -i W3002 -t 「cloudformation/*.yml」
  aws ssm get-parameters --query Parameters[].Value --output text --name 「RaiseTech-RDS-password1」 --with-decryption > /tmp/AWS_DB_PW.txt
 ```
 
-<details><summary>circleci概要</summary>
+<details><summary>cfn概要</summary>
 
 - cfnはインフラを自動化するために必要なIaC(Infrastructure as code)を行えるAWSのサービス。
 - IaC(Infrastructure as code)とはインフラをコード化すること。
@@ -149,6 +149,16 @@ cfn-lint -i W3002 -t 「cloudformation/*.yml」
 
 </details>
 
+<details><summary>テンプレート参考</summary>
+
+- 以下を参考にテンプレートを作成した
+[VPC,EC2](https://aws.taf-jp.com/blog/72288#AWS_CloudFormation_%E3%81%A7_EC2_%E3%82%92%E6%A7%8B%E7%AF%89%E3%81%97%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86)  
+[RDS](https://cloud5.jp/cf-rds/)  
+[ALB](https://cloud5.jp/cf-alb/)
+[S3](https://cloud5.jp/cf-s3/)  
+
+
+</details>
 
 <details><summary>今回の用途</summary>
 
@@ -490,14 +500,14 @@ options[:user] ||= "ec2-user"
 <br>
 <br>
 
-# 実行結果
+### 実行結果
 - ここまでで全ての準備は完了。実行結果は下記  
 [実行結果](./lecture13.md)
 
 <br>
 <br>
 
-## 学習記録はリンク先
+### 学習記録はリンク先
 [学習記録](./study-record.md)
 
 
