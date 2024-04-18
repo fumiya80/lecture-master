@@ -326,7 +326,7 @@ region: AWS_DEFAULT_REGION
 
 
 
-# 3.CircleCiとansible
+## 3.CircleCiとansible
 - circleciのconfigを下記①～②の手順で変更する
 - ①下記を先程設定したテキストファイル名を記載し変数として指定(本configでのテキストファイル名から未変更の場合はスキップ)
 ```
@@ -487,7 +487,7 @@ ansible_become_user=root  #ルート権限を使う際の定義。playbook内「
 <br>
 
 
-# 4.CircleCiとserverspec
+## 4.CircleCiとserverspec
 - sample_spec.rbの内容をテストしたい内容に書き換える
 - 3.112.229.42のフォルダ名をEC2のIPアドレスに変更する
 
