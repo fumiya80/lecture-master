@@ -152,12 +152,12 @@ cfn-lint -i W3002 -t 「cloudformation/*.yml」
 <details><summary>テンプレートと関数について</summary>
 
 - 以下を参考にテンプレートを作成した  
-[VPC,EC2](https://aws.taf-jp.com/blog/72288#AWS_CloudFormation_%E3%81%A7_EC2_%E3%82%92%E6%A7%8B%E7%AF%89%E3%81%97%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86)  
-[RDS](https://cloud5.jp/cf-rds/)  
-[ALB](https://cloud5.jp/cf-alb/)  
-[S3](https://cloud5.jp/cf-s3/)  
+[VPC,EC2について](https://aws.taf-jp.com/blog/72288#AWS_CloudFormation_%E3%81%A7_EC2_%E3%82%92%E6%A7%8B%E7%AF%89%E3%81%97%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86)  
+[RDSについて](https://cloud5.jp/cf-rds/)  
+[ALBについて](https://cloud5.jp/cf-alb/)  
+[S3について](https://cloud5.jp/cf-s3/)  
 
-- 主にSub/Ref/ImportValue/GetAtt関数を使用した
+- 今回はSub/Ref/ImportValue/GetAtt関数を使用した
 - Sub関数はテンプレート内で文字列の中に変数を埋め込むために使用する。
 
 ```
@@ -172,7 +172,6 @@ Resources:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupName: !Sub "${NameBase}-SubnetGroup"  #parametersで定義したNameBaseの値を代入
-
 ```
 
 - Ref関数はテンプレート内のリソースやパラメータを参照するために使用する。以下①②で説明
@@ -190,8 +189,6 @@ Outputs:
     Value: !Ref MyEC2  #この場合の戻り値は物理ID
     Export:
       Name: !Sub "${NameBase}-EC2-ID"
-
-
 ```
 
 ```
@@ -205,8 +202,6 @@ Outputs:
     Value: !Ref MyS3  #この場合の戻り値は名前
     Export:
       Name: !Sub "${NameBase}-s3-name"
-
-
 ```
 
 - ②リソースのパラメータを参照する場合の戻り値は様々である。どの値を返すかは①と同様に公式の戻り値セクションを参照
@@ -235,7 +230,6 @@ Resources:
       DBSubnetGroupName: !Sub "${NameBase}-SubnetGroup"
       SubnetIds:
         - !ImportValue RaiseTech-MyPrivateSubnet1-ID  #サブネットを作成した別のスタックでSubnet-IDをエクスポートし、ImportValueで参照している
-
 ```
 
 - GetAtt関数はリソースの特定の情報を取得するために使用する。リソースに対し参照できる値は上記と同様に公式の戻り値セクションを参照
@@ -246,7 +240,7 @@ Resources:
   MyEC2:
     Type: AWS::EC2::Instance
     Properties:
-
+～～～～～～～～～～～～～～～～～～
 Outputs:
   EC2PublicIP:
     Value: !GetAtt MyEC2.PublicIp  #MyEC2.PublicIpを指定することでEC2のパブリックアドレスを参照できる
