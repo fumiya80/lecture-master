@@ -149,13 +149,111 @@ cfn-lint -i W3002 -t 「cloudformation/*.yml」
 
 </details>
 
-<details><summary>テンプレート参考</summary>
+<details><summary>テンプレートと関数について</summary>
 
-- 以下を参考にテンプレートを作成した
+- 以下を参考にテンプレートを作成した  
 [VPC,EC2](https://aws.taf-jp.com/blog/72288#AWS_CloudFormation_%E3%81%A7_EC2_%E3%82%92%E6%A7%8B%E7%AF%89%E3%81%97%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86)  
 [RDS](https://cloud5.jp/cf-rds/)  
-[ALB](https://cloud5.jp/cf-alb/)
+[ALB](https://cloud5.jp/cf-alb/)  
 [S3](https://cloud5.jp/cf-s3/)  
+
+- 主にSub/Ref/ImportValue/GetAtt関数を使用した
+- Sub関数はテンプレート内で文字列の中に変数を埋め込むために使用する。
+
+```
+Parameters:
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: "practice"
+～～～～～～～～～～～～～～～～～～
+Resources:
+  MyRDSSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupName: !Sub "${NameBase}-SubnetGroup"  #parametersで定義したNameBaseの値を代入
+
+```
+
+- Ref関数はテンプレート内のリソースやパラメータを参照するために使用する。以下①②で説明
+- ①リソースを参照する場合の戻り値は大きく2つで、物理ID or 名前である。どの値を返すかは下記公式からリソースを選択し戻り値セクションを参照
+[リソース及びプロパティタイプ](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
+
+```
+Resources:
+  MyEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+～～～～～～～～～～～～～～～～～～
+Outputs:
+  MyEC2:
+    Value: !Ref MyEC2  #この場合の戻り値は物理ID
+    Export:
+      Name: !Sub "${NameBase}-EC2-ID"
+
+
+```
+
+```
+Resources:
+  MyS3:
+    Type: AWS::S3::Bucket
+    Properties:
+～～～～～～～～～～～～～～～～～～
+Outputs:
+  MyS3:
+    Value: !Ref MyS3  #この場合の戻り値は名前
+    Export:
+      Name: !Sub "${NameBase}-s3-name"
+
+
+```
+
+- ②リソースのパラメータを参照する場合の戻り値は様々である。どの値を返すかは①と同様に公式の戻り値セクションを参照
+[リソース及びプロパティタイプ](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
+
+```
+Resources:
+  MyPublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+～～～～～～～～～～～～～～～～～～
+Outputs:
+  MyPublicSubnet1:
+   Value: !Ref MyPublicSubnet1　#この場合の戻り値はsubnetの物理ID
+   Export:
+     Name: !Sub "${NameBase}-MyPublicSubnet1-ID"
+```
+
+- ImportValue関数は別スタックからエクスポートされている名前や値を参照する場合に使用する
+```
+Resources:
+  MyRDSSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "RDSSubnetGroup"
+      DBSubnetGroupName: !Sub "${NameBase}-SubnetGroup"
+      SubnetIds:
+        - !ImportValue RaiseTech-MyPrivateSubnet1-ID  #サブネットを作成した別のスタックでSubnet-IDをエクスポートし、ImportValueで参照している
+
+```
+
+- GetAtt関数はリソースの特定の情報を取得するために使用する。リソースに対し参照できる値は上記と同様に公式の戻り値セクションを参照
+[リソース及びプロパティタイプ](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html)
+
+```
+Resources:
+  MyEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+
+Outputs:
+  EC2PublicIP:
+    Value: !GetAtt MyEC2.PublicIp  #MyEC2.PublicIpを指定することでEC2のパブリックアドレスを参照できる
+    Export:
+      Name: !Sub "${NameBase}-EC2-PublicIP"
+```
+
 
 
 </details>
@@ -448,6 +546,7 @@ end
 - serverspecで実行するjobは下記。serverspecのテストに必要な依存関係のインストール、テストの実行である(configファイルより抜粋)
 
 <dev>
+
 ```
   serverspec-execute:
     executor: ruby/default
@@ -500,14 +599,14 @@ options[:user] ||= "ec2-user"
 <br>
 <br>
 
-### 実行結果
+## 実行結果
 - ここまでで全ての準備は完了。実行結果は下記  
 [実行結果](./lecture13.md)
 
 <br>
 <br>
 
-### 学習記録はリンク先
+## 学習記録はリンク先
 [学習記録](./study-record.md)
 
 
