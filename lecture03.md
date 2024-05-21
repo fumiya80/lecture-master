@@ -18,7 +18,7 @@
 ![サンプルアプリ](image/03_DBstop.png)
 
 ## Railsの構成管理ツール
-      bundler
+- bundler
 
 ## - 今回の課題で学んだこと
 - gemでの入れ方　例;gem install rails-バージョン
