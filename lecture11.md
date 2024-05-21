@@ -11,7 +11,7 @@ $ gem install serverspec
 $ serverspec-init
 ```
 ### テスト準備
-- 生成された spec/localhost/sample_spec.rb ファイルにテストコードを書き込む
+- 生成されたspec/localhost/sample_spec.rb ファイルにテストコードを書き込む。
 - 過去の講座で「インフラエンジニアとしてlogを取っていないことは話にならない」とあったので、logファイルに関するテストを追加した。
 - 第5回で構築した環境ではunicornとnginxがsocketファイルを用い通信するように設定しており、その設定を確認する内容を追加した。
 - テストコードは下記
