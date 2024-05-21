@@ -70,8 +70,11 @@ jobs:
       - checkout
       - ruby/install:
           version: '3.1.2'
-      - ruby/install-deps:
-          app-dir: serverspec
+      - run:
+          name: bundle install
+          command: |
+            cd serverspec
+            bundle install
       - run:
           name: execute serverspec
           command: |
