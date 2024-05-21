@@ -1,12 +1,13 @@
 # 学習内容
-## 構成図
-![figure](image/figure.png)
 
 ## **概要**
 - **CircleCIを用い構成図内①∼③を走らせ、AWS環境の構築・サーバ構築・アプリデプロイ・サーバテストを一連で自動実行**
 - **①Create…CloudFormation(以降CFn)テンプレートを作成しVPC・EC2・RDS・ALB・S3のAWS環境を自動構築**
 - **②Setup…Ansibleにてサーバの構成をコード化し、サーバ構築とアプリデプロイを自動化**
 - **③Test…ServerSpecを用い②で構築したサーバに対し自動テスト**
+
+## 構成図
+![figure](image/figure.png)
 
 <br>
 <br>
