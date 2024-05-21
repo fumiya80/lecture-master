@@ -33,7 +33,7 @@
 ![cfn](image/13_cfn.png)
 
 ## ansibleでの環境構築とアプリのデプロイ
-- circleciのconfigファイルにAnsibleのPlaybookを実行する処理を追加 詳細は[ansible](./ansible)ディレクトリ参照
+- circleciのconfigファイルにAnsibleのPlaybookを実行する処理を追加。詳細は[ansible](./ansible)ディレクトリ参照
 ```
 # 一部抜粋
   ansible-execute:
@@ -51,7 +51,7 @@
 ```
 - circleciでの実行結果  
 ![ansible](image/13_ansible.png)  
-- ALBのDNS名でアクセスし、アプリが動作することを確認  
+- ALBのDNS名でアクセス、アプリが動作することを確認  
 ![app](image/13_app-deploy.jpg)  
 - S3に保存されていることを確認  
 ![s3](image/13_s3.png)
